@@ -1,0 +1,49 @@
+%NAME%
+mingw-w64-x86_64-harfbuzz
+
+%VERSION%
+8.2.2-1
+
+%BASE%
+mingw-w64-harfbuzz
+
+%DESC%
+OpenType text shaping engine (mingw-w64)
+
+%URL%
+https://github.com/harfbuzz/harfbuzz
+
+%ARCH%
+any
+
+%BUILDDATE%
+1697615536
+
+%INSTALLDATE%
+1704381915
+
+%PACKAGER%
+CI (msys2/msys2-autobuild/e6700d20/6557786559)
+
+%SIZE%
+12536801
+
+%REASON%
+1
+
+%LICENSE%
+spdx:MIT
+
+%VALIDATION%
+pgp
+
+%DEPENDS%
+mingw-w64-x86_64-freetype
+mingw-w64-x86_64-gcc-libs
+mingw-w64-x86_64-glib2
+mingw-w64-x86_64-graphite2
+
+%OPTDEPENDS%
+mingw-w64-x86_64-icu: harfbuzz-icu support
+mingw-w64-x86_64-cairo: hb-view program
+

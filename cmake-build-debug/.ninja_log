@@ -1,9 +1,7 @@
 # ninja log v5
-10	702	7262578731279269	CMakeFiles/AutoGestPredict.dir/main.c.obj	ed3960ddc129b290
-9	731	7262594387758042	AutoGestPredict.exe	5ac4eceb303b4f12
-6	441	7262603805957168	CMakeFiles/AutoGestPredict.dir/main.c.obj	ed3960ddc129b290
-444	836	7262603808827103	AutoGestPredict.exe	5ac4eceb303b4f12
-5	290	7262604347906573	CMakeFiles/AutoGestPredict.dir/main.c.obj	ed3960ddc129b290
-291	612	7262604350166620	AutoGestPredict.exe	5ac4eceb303b4f12
 4	169	7262605127064084	CMakeFiles/AutoGestPredict.dir/main.c.obj	ed3960ddc129b290
 171	554	7262605129984134	AutoGestPredict.exe	5ac4eceb303b4f12
+16	2293	7262649008541320	CMakeFiles/AutoGestPredict.dir/main.c.obj	8445fa9d0e0e99ca
+6	12988	7262649115161858	CMakeFiles/sqlite3.dir/src/sqlite3.c.obj	63c71f93bc0e6413
+13009	13507	7262649120802592	libsqlite3.a	a10375ee6a3508a7
+13507	13942	7262649125084340	AutoGestPredict.exe	c7dee43fbf7a0e63

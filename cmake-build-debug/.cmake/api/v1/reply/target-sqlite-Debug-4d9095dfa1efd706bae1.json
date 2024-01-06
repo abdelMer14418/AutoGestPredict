@@ -1,0 +1,289 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "sqlite.exe"
+		},
+		{
+			"path" : "sqlite.pdb"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"target_link_libraries",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 57,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 58,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 33,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 37,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 38,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 39,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 40,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 41,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 42,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 43,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 44,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 45,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 46,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 47,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 48,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 49,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 50,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 51,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -std=gnu11 -fdiagnostics-color=always"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 3,
+					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/src"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "C:/msys64/mingw64/include/gtk-4.0"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "C:/msys64/mingw64/include/pango-1.0"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/msys64/mingw64/include/gdk-pixbuf-2.0"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "C:/msys64/mingw64/include/cairo"
+				},
+				{
+					"backtrace" : 8,
+					"path" : "C:/msys64/mingw64/include/harfbuzz"
+				},
+				{
+					"backtrace" : 9,
+					"path" : "C:/msys64/mingw64/include/freetype2"
+				},
+				{
+					"backtrace" : 10,
+					"path" : "C:/msys64/mingw64/include/graphene-1.0"
+				},
+				{
+					"backtrace" : 11,
+					"path" : "C:/msys64/mingw64/lib/graphene-1.0/include"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "C:/msys64/mingw64/include"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "C:/msys64/mingw64/include/glib-2.0"
+				},
+				{
+					"backtrace" : 14,
+					"path" : "C:/msys64/mingw64/lib/glib-2.0/include"
+				},
+				{
+					"backtrace" : 15,
+					"path" : "C:/msys64/mingw64/include/fribidi"
+				},
+				{
+					"backtrace" : 16,
+					"path" : "C:/msys64/mingw64/include/webp"
+				},
+				{
+					"backtrace" : 17,
+					"path" : "C:/msys64/mingw64/include/libpng16"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "C:/msys64/mingw64/include/pixman-1"
+				}
+			],
+			"language" : "C",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					1
+				],
+				"standard" : "11"
+			},
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "sqlite3::@6890427a1f51a3e7e1df"
+		}
+	],
+	"id" : "sqlite::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libsqlite3.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
+				"role" : "libraries"
+			}
+		],
+		"language" : "C"
+	},
+	"name" : "sqlite",
+	"nameOnDisk" : "sqlite.exe",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/shell.c",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}
