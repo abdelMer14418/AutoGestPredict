@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 */
-
+/*
 #include <gtk/gtk.h>
 
 static void
@@ -84,4 +84,57 @@ main (int    argc,
     g_object_unref (app);
 
     return status;
+}*/
+
+#include <stdio.h>
+#include <curl/curl.h>
+struct memory {
+    char *response;
+    size_t size;
+};
+static size_t cb(void *data, size_t size, size_t nmemb, void *clientp)
+{
+    size_t realsize = size * nmemb;
+    char carcost[10];
+    int j =0;
+
+    for (size_t i = 1445; i <1470;i++)
+    {
+
+        if (isdigit(((char *)data)[i]) || ((char *)data)[i] == '$' || ((char *)data)[i] == '.')
+        {
+            carcost[j] = ((char *)data)[i];
+            j++;
+        }
+    }
+    carcost[j] = '\0';
+    printf("%s",carcost);
+    return nmemb;
+}
+int main() {
+    CURL *curl;
+    CURLcode res;
+    char* searchresult;
+    char request[50];
+    const char* s2 =  "Prediction:";
+    sprintf(request,"a=%d&b=%d&c=%d&d=%d&e=%d",2015,43000,231.0,0,"Europe");
+    curl_global_init(CURL_GLOBAL_ALL);
+
+    curl = curl_easy_init();
+    if(curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, "http://127.0.0.1:5000/predict");
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, cb);
+        res = curl_easy_perform(curl);
+        if(res != CURLE_OK)
+            fprintf(stderr, "curl_easy_perform() failed: %s\n",
+                    curl_easy_strerror(res));
+        else
+        {
+        }
+        curl_easy_cleanup(curl);
+    }
+    curl_global_cleanup();
+    return 0;
+
 }

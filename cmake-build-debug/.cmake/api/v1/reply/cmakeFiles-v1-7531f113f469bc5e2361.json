@@ -9,6 +9,14 @@
 			"path" : "cmake-build-debug/CMakeFiles/3.27.8/CMakeSystem.cmake"
 		},
 		{
+			"path" : "Curl/vcpkg/scripts/buildsystems/vcpkg.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/JetBrains/CLion 2023.3.2/bin/cmake/win/x64/share/cmake-3.27/Modules/CMakeDependentOption.cmake"
+		},
+		{
 			"isCMake" : true,
 			"isExternal" : true,
 			"path" : "C:/Program Files/JetBrains/CLion 2023.3.2/bin/cmake/win/x64/share/cmake-3.27/Modules/CMakeSystemSpecificInitialize.cmake"
@@ -105,6 +113,57 @@
 			"isCMake" : true,
 			"isExternal" : true,
 			"path" : "C:/Program Files/JetBrains/CLion 2023.3.2/bin/cmake/win/x64/share/cmake-3.27/Modules/CMakeCommonLanguageInclude.cmake"
+		},
+		{
+			"path" : "Curl/vcpkg/installed/x64-windows/share/curl/vcpkg-cmake-wrapper.cmake"
+		},
+		{
+			"path" : "Curl/vcpkg/installed/x64-windows/share/curl/CURLConfigVersion.cmake"
+		},
+		{
+			"path" : "Curl/vcpkg/installed/x64-windows/share/curl/CURLConfig.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/JetBrains/CLion 2023.3.2/bin/cmake/win/x64/share/cmake-3.27/Modules/CMakeFindDependencyMacro.cmake"
+		},
+		{
+			"path" : "Curl/vcpkg/installed/x64-windows/share/zlib/vcpkg-cmake-wrapper.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/JetBrains/CLion 2023.3.2/bin/cmake/win/x64/share/cmake-3.27/Modules/FindZLIB.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/JetBrains/CLion 2023.3.2/bin/cmake/win/x64/share/cmake-3.27/Modules/SelectLibraryConfigurations.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/JetBrains/CLion 2023.3.2/bin/cmake/win/x64/share/cmake-3.27/Modules/FindPackageHandleStandardArgs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/JetBrains/CLion 2023.3.2/bin/cmake/win/x64/share/cmake-3.27/Modules/FindPackageMessage.cmake"
+		},
+		{
+			"path" : "Curl/vcpkg/installed/x64-windows/share/curl/CURLTargets.cmake"
+		},
+		{
+			"path" : "Curl/vcpkg/installed/x64-windows/share/curl/CURLTargets-debug.cmake"
+		},
+		{
+			"path" : "Curl/vcpkg/installed/x64-windows/share/curl/CURLTargets-release.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/JetBrains/CLion 2023.3.2/bin/cmake/win/x64/share/cmake-3.27/Modules/SelectLibraryConfigurations.cmake"
 		}
 	],
 	"kind" : "cmakeFiles",
