@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2; /* Nouvelle couleur de fond */
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #6e2142;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #6e2142;
+            border-radius: 5px;
+            width: 250px; /* Largeur fixe pour les champs de saisie */
+        }
+
+        input[type="submit"] {
+            background-color: #6e2142;
+            color: white;
+            cursor: pointer;
+        }
+
+        h2 {
+            color: #6e2142;
+        }
+    </style>
+</head>
+
+<body>
+    <center>
+
+        <h1> CAR PRICE PREDICTION </h1><br>
+
+        <form method="POST" action="{{url_for('predict')}}">
+            <b> Année : <input type="text" name='a' placeholder="Année"><br><br>
+                Kilometrage : <input type="text" name='b' placeholder="Kilometrage"><br><br>
+                Horsepower : <input type="text" name='c' placeholder="Horsepower"><br><br>
+                Accident : <input type="text" name='d' placeholder="Accident"><br><br>
+                Continent : <input type="text" name='e' placeholder="Continent"><br><br><br></b>
+            <input type="submit" value='PREDICT'>
+        </form>
+
+        <h2>Prediction: {{ '%.2f' | format(pred) }} $</h2>
+
+    </center>
+</body>
+
+</html>
