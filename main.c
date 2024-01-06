@@ -3,138 +3,136 @@
 //
 
 
-/*#include <stdio.h>
-#include ".\src\sqlite3.h"
-
-
-
-
-
-
-
-int main(int argc, char* argv[]) {
-
-
-    sqlite3 *db;
-    char *err_msg = 0;
-
-    int rc = sqlite3_open("system.db", &db);
-
-    if (rc != SQLITE_OK) {
-        fprintf(stderr, "Impossible d'ouvrir la base de données : %s\n", sqlite3_errmsg(db));
-        return rc;
-    }
-
-    char *sql = "CREATE TABLE Amis(Id INT, Nom TEXT);";
-
-    rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
-
-    if (rc != SQLITE_OK ) {
-        fprintf(stderr, "Erreur SQL : %s\n", err_msg);
-        sqlite3_free(err_msg);
-        sqlite3_close(db);
-
-        return rc;
-    }
-    sqlite3_close(db);
-
-
-
-    return 0;
-}
-*/
-/*
-#include <gtk/gtk.h>
-
-static void
-print_hello (GtkWidget *widget,
-             gpointer   data)
-{
-    g_print ("Hello World\n");
-}
-
-static void
-activate (GtkApplication *app,
-          gpointer        user_data)
-{
-    GtkWidget *window;
-    GtkWidget *button;
-
-    window = gtk_application_window_new (app);
-    gtk_window_set_title (GTK_WINDOW (window), "Hello");
-    gtk_window_set_default_size (GTK_WINDOW (window), 200, 200);
-
-    button = gtk_button_new_with_label ("Hello World");
-    g_signal_connect (button, "clicked", G_CALLBACK (print_hello), NULL);
-    gtk_window_set_child (GTK_WINDOW (window), button);
-
-    gtk_window_present (GTK_WINDOW (window));
-}
-
-int
-main (int    argc,
-      char **argv)
-{
-    GtkApplication *app;
-    int status;
-
-    app = gtk_application_new ("org.gtk.example", G_APPLICATION_DEFAULT_FLAGS);
-    g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
-    status = g_application_run (G_APPLICATION (app), argc, argv);
-    g_object_unref (app);
-
-    return status;
-}*/
-
 #include <stdio.h>
+#include <ctype.h>
+#include ".\src\sqlite3.h"
 #include <curl/curl.h>
-struct memory {
-    char *response;
-    size_t size;
-};
-static size_t cb(void *data, size_t size, size_t nmemb, void *clientp)
+
+
+sqlite3 *db;  // Declare a sqlite Database.
+char *err_msg = 0;
+char sql_db[500];
+sqlite_int64 userid = 0;
+sqlite_int64 Rentalid = 0;
+
+
+
+void caesar_chiper_encrypt(char* data)
 {
-    size_t realsize = size * nmemb;
-    char carcost[10];
-    int j =0;
-
-    for (size_t i = 1445; i <1470;i++)
+    int key = 6;
+    char ch;
+    for (int i = 0; data[i] != '\0';++i)
     {
-
-        if (isdigit(((char *)data)[i]) || ((char *)data)[i] == '$' || ((char *)data)[i] == '.')
-        {
-            carcost[j] = ((char *)data)[i];
-            j++;
+        ch = data[i];
+        printf("%c",ch);
+        //Lowercase characters.
+        if (islower(ch)) {
+            ch = (ch - 'a' + key) % 26 + 'a';
         }
+            // Uppercase characters.
+        else if (isupper(ch)) {
+            ch = (ch - 'A' + key) % 26 + 'A';
+        }
+
+            // Numbers.
+        else if (isdigit(ch)) {
+            ch = (ch - '0' + key) % 10 + '0';
+        }
+        data[i] = ch;
     }
-    carcost[j] = '\0';
-    printf("%s",carcost);
-    return nmemb;
 }
-int main() {
-    CURL *curl;
-    CURLcode res;
-    char* searchresult;
-    char request[50];
-    const char* s2 =  "Prediction:";
-    sprintf(request,"a=%d&b=%d&c=%d&d=%d&e=%d",2015,43000,231.0,0,"Europe");
-    curl_global_init(CURL_GLOBAL_ALL);
 
-    curl = curl_easy_init();
-    if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, "http://127.0.0.1:5000/predict");
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request);
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, cb);
-        res = curl_easy_perform(curl);
-        if(res != CURLE_OK)
-            fprintf(stderr, "curl_easy_perform() failed: %s\n",
-                    curl_easy_strerror(res));
-        else
-        {
+void caesar_chiper_decrypt(char* data)
+{
+    int key = 6;
+    char ch;
+    for (int i = 0; data[i] != '\0';++i) {
+        ch = data[i];
+        //Lowercase characters.
+        if (islower(ch)) {
+            ch = (ch - 'a' - key + 26) % 26 + 'a';
+        } else if (isupper(ch)) {
+            ch = (ch - 'A' - key + 26) % 26 + 'A';
+        } else if (isdigit(ch)) {
+            ch = (ch - '0' - key + 10) % 10 + '0';
         }
-        curl_easy_cleanup(curl);
+        data[i] = ch;
     }
-    curl_global_cleanup();
-    return 0;
+}
 
+
+static int client_GetLastId_callback(void *data, int argc, char **argv,char **azColName)
+{
+    userid = atoi(argv[0]);
+    return 0;
+}
+static int Rental_GetLastId_callback(void *data, int argc, char **argv,char **azColName)
+{
+    Rentalid = atoi(argv[0]);
+    return 0;
+}
+
+
+
+int main(int argc,
+         char **argv)
+{
+    int status;  // Show the application status
+    char admin_pass[] = "abdelmer_1234";
+    int rc = sqlite3_open("system.db", &db); // Create system database sql file.
+    /* Check that the database is created or not*/
+    if (rc != SQLITE_OK) {
+
+        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return 1;
+    }
+
+    /*
+     **  Initialize the System Databases
+     */
+
+
+    /* Create Vehicles Data base*/
+    char *sql = "CREATE TABLE IF NOT EXISTS Vehicles(Vehicle_Id INT PRIMARY KEY,"
+                " Brand TEXT, Model TEXT, Year TEXT, Fuel_type TEXT,"
+                " Transmission TEXT,"
+                " Seating_Capacity TEXT)";
+    sqlite3_exec(db, sql, 0, 0, &err_msg);
+    sql = "INSERT INTO Vehicles VALUES(1,'BMW','X3','2012','Gasoline','Manual','4');"
+          "INSERT INTO Vehicles VALUES(2,'AUDI','A6','2022','Petrol','Automatic','4');"
+          "INSERT INTO Vehicles VALUES(3,'Peugeout','301','2015','Gasoline','Manual','4');";
+    sqlite3_exec(db, sql, 0, 0, &err_msg);
+
+    /*Create Administrator Data base*/
+    sql =  "CREATE TABLE IF NOT EXISTS Administrator(Admin_Id INT PRIMARY KEY,"
+           " Admin_Username TEXT, Admin_Password TEXT)";
+    sqlite3_exec(db, sql, 0, 0, &err_msg);
+
+    /* Create Clients Database*/
+    sql = "CREATE TABLE IF NOT EXISTS Clients(User_Id INT PRIMARY KEY, Last_Name TEXT,"
+          " First_Name TEXT,Email TEXT,Phone_Number TEXT,Password TEXT )";
+    sqlite3_exec(db, sql, 0, 0, &err_msg);
+    caesar_chiper_encrypt(admin_pass);
+    sprintf(sql_db,"INSERT INTO Administrator VALUES(1,'abdlmer','%s')",admin_pass);
+    printf("%s",sql_db);
+    sqlite3_exec(db, sql_db, 0, 0, &err_msg);
+    /* Create Rentals Database*/
+    sql = "CREATE TABLE IF NOT EXISTS Rentals(Rental_Id INT PRIMARY KEY,"
+          "User_Id INT,"
+          "Start_date TEXT,End_date TEXT, Cost INT, Rental_Status TEXT,"
+          "Vehicle_Id INT, FOREIGN KEY(Vehicle_Id) REFERENCES Vehicles(Vehicle_Id),"
+          " FOREIGN KEY(User_Id) REFERENCES Clients(User_Id))";
+    sqlite3_exec(db, sql, 0, 0, &err_msg);
+    /*Get the number of inserted rows in Clients table*/
+    sprintf(sql_db,"SELECT User_Id from Clients");
+    sqlite3_exec(db,sql_db,client_GetLastId_callback,0,&err_msg);
+    printf("\n%lld\n",userid);
+    sprintf(sql_db,"SELECT Rental_Id from Rentals");
+    sqlite3_exec(db,sql_db,Rental_GetLastId_callback,0,&err_msg);
+    printf("%lld\n",Rentalid);
+
+
+
+    return 0;
 }
