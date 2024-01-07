@@ -28,6 +28,8 @@ char *err_msg = 0;
 char sql_db[500];
 sqlite_int64 userid = 0;
 sqlite_int64 Rentalid = 0;
+int isemailfound = -1;
+
 
 
 
@@ -86,6 +88,53 @@ static int Rental_GetLastId_callback(void *data, int argc, char **argv,char **az
     return 0;
 }
 
+static int client_CheckMail_callback(void *data, int argc, char **argv,char **azColName)
+{
+    int result = strcmp((char*)data,argv[0]);
+    if (result == 0)
+    {
+        isemailfound = result;
+    }
+    return 0;
+}
+
+static void register_database_callback(GtkWidget *widget,gpointer data) {
+    GtkWidget *RegisterStatuswindow;
+    GtkEntryBuffer *register_databuffer;
+    char *firstname, *lastname, *password, *email, *phonenumber;
+    GtkWidget *datalabel;
+    RegisterStatuswindow = gtk_window_new(); // Create login window.
+    register_databuffer = gtk_entry_get_buffer(GTK_ENTRY(register_firstname_entry));
+    firstname = gtk_entry_buffer_get_text(register_databuffer);
+    register_databuffer = gtk_entry_get_buffer(GTK_ENTRY(register_lastname_entry));
+    lastname = gtk_entry_buffer_get_text(register_databuffer);
+    register_databuffer = gtk_entry_get_buffer(GTK_ENTRY(register_password_entry));
+    password = gtk_entry_buffer_get_text(register_databuffer);
+    caesar_chiper_encrypt(password);
+    register_databuffer = gtk_entry_get_buffer(GTK_ENTRY(register_email_entry));
+    email = gtk_entry_buffer_get_text(register_databuffer);
+    register_databuffer = gtk_entry_get_buffer(GTK_ENTRY(register_phonenumber_entry));
+    phonenumber = gtk_entry_buffer_get_text(register_databuffer);
+    isemailfound = -1;
+    sprintf(sql_db, "SELECT Email from Clients");
+    sqlite3_exec(db, sql_db, client_CheckMail_callback, email, &err_msg);
+    if (isemailfound == 0)
+    {
+        datalabel = gtk_label_new("Email is already used");
+    }
+    else
+    {
+        sprintf(sql_db,"SELECT User_Id from Clients");
+        sqlite3_exec(db,sql_db,client_GetLastId_callback,0,&err_msg);
+        userid = userid + 1;
+        sprintf (sql_db,"INSERT INTO Clients VALUES(%lld,'%s','%s','%s','%s','%s');",userid,lastname,firstname,email,phonenumber,password);
+        sqlite3_exec(db, sql_db, 0, 0, &err_msg);
+        datalabel = gtk_label_new("Created Successfully!");
+    }
+    gtk_window_set_child(RegisterStatuswindow,datalabel);
+    gtk_window_present(GTK_WINDOW(RegisterStatuswindow));
+}
+
 static void Login_callback(GtkWidget *widget, gpointer data)
 {
     GtkWidget *loginwindow;
@@ -136,7 +185,7 @@ static void register_callback(GtkWidget *widget, gpointer data)
     gtk_box_append(registerBox,register_phonenumber_entry);
     gtk_box_append(registerBox,register_password_entry);
     gtk_box_append(registerBox,register_Button);
-    //g_signal_connect(register_Button, "clicked", G_CALLBACK(register_database_callback), NULL);
+    g_signal_connect(register_Button, "clicked", G_CALLBACK(register_database_callback), NULL);
     gtk_window_present(GTK_WINDOW(registerwindow));
 }
 
