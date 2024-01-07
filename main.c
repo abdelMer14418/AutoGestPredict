@@ -31,6 +31,8 @@ sqlite_int64 Rentalid = 0;
 int isemailfound = -1;
 int islogintrue = -1;
 int current_user_id;
+int isadminlogintrue = -1;
+
 
 
 
@@ -98,6 +100,23 @@ static int client_CheckLoginCredintials_callback(void *data, int argc, char **ar
     return 0;
 }
 
+static int Admin_CheckLoginCredintials_callback(void *data, int argc, char **argv,char **azColName)
+{
+    int result;
+    char*pass_decrypt;
+    pass_decrypt = argv[2];
+    caesar_chiper_decrypt(pass_decrypt);
+    result = strcmp((char*)data,pass_decrypt);
+    printf("%s\n",(char*)data);
+    printf("%s\n",argv[2]);
+    printf("%s\n",pass_decrypt);
+    if(result == 0)
+    {
+        isadminlogintrue = result;
+    }
+    return 0;
+}
+
 
 static int client_GetLastId_callback(void *data, int argc, char **argv,char **azColName)
 {
@@ -120,6 +139,42 @@ static int client_CheckMail_callback(void *data, int argc, char **argv,char **az
     return 0;
 }
 
+
+
+static void Admin_login_database_callback(GtkWidget *widget,gpointer data)
+{
+    GtkWidget *Admin_loginwindow;
+    GtkEntryBuffer *databuffer;
+    char* datalogin;
+    char* passlogin;
+    GtkWidget *datalabel;
+    GtkWidget *Admin_proceed_Button;
+    GtkBox *Admin_loginBox;
+    isadminlogintrue = -1;
+    Admin_loginwindow = gtk_window_new(); // Create login window
+    Admin_loginBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0); // Create login box.
+    gtk_window_set_child(GTK_WINDOW(Admin_loginwindow),Admin_loginBox);
+    databuffer = gtk_entry_get_buffer(login_Admin_username_entry);
+    datalogin = gtk_entry_buffer_get_text(databuffer);
+    databuffer = gtk_entry_get_buffer(login_Admin_password_entry);
+    passlogin = gtk_entry_buffer_get_text(databuffer);
+    sprintf(sql_db,"SELECT * from Administrator where Admin_Username='%s'",datalogin);
+    sqlite3_exec(db,sql_db,Admin_CheckLoginCredintials_callback,passlogin,&err_msg);
+    if (isadminlogintrue == 0)
+    {
+        datalabel = gtk_label_new("right credentials!");
+        gtk_box_append(Admin_loginBox,datalabel);
+        Admin_proceed_Button = gtk_button_new_with_label("Proceed!");
+        gtk_box_append(Admin_loginBox,Admin_proceed_Button);
+        //g_signal_connect(Admin_proceed_Button, "clicked", G_CALLBACK(Administrator_callback), NULL);
+    }
+    else
+    {
+        datalabel = gtk_label_new("Wrong credentials!");
+        gtk_box_append(Admin_loginBox,datalabel);
+    }
+    gtk_window_present(GTK_WINDOW(Admin_loginwindow));
+}
 
 static void login_database_callback(GtkWidget *widget,gpointer data)
 {
@@ -293,7 +348,7 @@ static void Admin_Login_callback(GtkWidget *widget, gpointer data)
     gtk_box_append(Admin_loginBox,login_Admin_username_entry);
     gtk_box_append(Admin_loginBox,login_Admin_password_entry);
     gtk_box_append(Admin_loginBox,Admin_login_Button);
-    //g_signal_connect(Admin_login_Button, "clicked", G_CALLBACK(Admin_login_database_callback), NULL);
+    g_signal_connect(Admin_login_Button, "clicked", G_CALLBACK(Admin_login_database_callback), NULL);
     gtk_window_present(GTK_WINDOW(Admin_loginwindow));
 }
 static void
