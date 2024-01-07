@@ -18,6 +18,11 @@ GtkWidget *register_password_entry;
 GtkWidget *register_email_entry;
 GtkWidget *register_phonenumber_entry;
 
+GtkWidget *login_username_entry;
+GtkWidget *login_password_entry;
+
+
+
 sqlite3 *db;  // Declare a sqlite Database.
 char *err_msg = 0;
 char sql_db[500];
@@ -81,6 +86,29 @@ static int Rental_GetLastId_callback(void *data, int argc, char **argv,char **az
     return 0;
 }
 
+static void Login_callback(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *loginwindow;
+    GtkWidget *login_Button;
+    GtkBox *loginBox;
+    GtkPasswordEntry *pass;
+    loginwindow = gtk_window_new(); // Create login window.
+    gtk_window_set_title(GTK_WINDOW(loginwindow), "Log in Page"); // Set the title of the window
+    loginBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0); // Create login box.
+    gtk_window_set_child(GTK_WINDOW(loginwindow),loginBox);
+    login_username_entry = gtk_entry_new();
+    login_password_entry = gtk_entry_new();
+    gtk_entry_set_visibility(GTK_ENTRY(login_password_entry),FALSE);
+    login_Button = gtk_button_new_with_label("Log in");
+    gtk_entry_set_placeholder_text(GTK_ENTRY(login_username_entry),"Email Address");
+    gtk_entry_set_placeholder_text(GTK_ENTRY(login_password_entry),"Password");
+    gtk_box_append(loginBox,login_username_entry);
+    gtk_box_append(loginBox,login_password_entry);
+    gtk_box_append(loginBox,login_Button);
+    //g_signal_connect(login_Button, "clicked", G_CALLBACK(login_database_callback), NULL);
+    gtk_window_present(GTK_WINDOW(loginwindow));
+}
+
 static void register_callback(GtkWidget *widget, gpointer data)
 {
     GtkWidget *registerwindow;
@@ -130,7 +158,7 @@ static void User_callback(GtkWidget *widget, gpointer data)
     gtk_box_append(UserBox,Button_User_Register);
     gtk_window_present(GTK_WINDOW(UserWindow));  // to show the window.
     g_signal_connect(Button_User_Register, "clicked", G_CALLBACK(register_callback), NULL);
-    //g_signal_connect(Button_User_Login, "clicked", G_CALLBACK(Login_callback), NULL);
+    g_signal_connect(Button_User_Login, "clicked", G_CALLBACK(Login_callback), NULL);
 }
 static void Admin_Login_callback(GtkWidget *widget, gpointer data)
 {
