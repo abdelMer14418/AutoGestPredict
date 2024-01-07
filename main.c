@@ -76,7 +76,25 @@ static int Rental_GetLastId_callback(void *data, int argc, char **argv,char **az
 }
 
 
+static void User_callback(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *UserWindow;
+    GtkBox *UserBox;
+    GtkWidget *Button_User_Login;
+    GtkWidget *Button_User_Register;
 
+    UserWindow = gtk_window_new(); // Create Admin window.
+    gtk_window_set_title(GTK_WINDOW(UserWindow), "User"); // Set the title of the window
+    UserBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0); // Create Admin box.
+    gtk_window_set_child(GTK_WINDOW(UserWindow),UserBox);
+    Button_User_Login = gtk_button_new_with_label("Log in");
+    Button_User_Register = gtk_button_new_with_label("Register");
+    gtk_box_append(UserBox,Button_User_Login);
+    gtk_box_append(UserBox,Button_User_Register);
+    gtk_window_present(GTK_WINDOW(UserWindow));  // to show the window.
+    //g_signal_connect(Button_User_Register, "clicked", G_CALLBACK(register_callback), NULL);
+    //g_signal_connect(Button_User_Login, "clicked", G_CALLBACK(Login_callback), NULL);
+}
 static void Admin_Login_callback(GtkWidget *widget, gpointer data)
 {
     GtkWidget *Admin_loginwindow;
@@ -119,7 +137,7 @@ activate(GtkApplication *app,
     gtk_box_append(Mainbox,Button_Administrator);
     gtk_box_append(Mainbox,Button_User);
     g_signal_connect(Button_Administrator, "clicked", G_CALLBACK(Admin_Login_callback), NULL);
-    //g_signal_connect(Button_User, "clicked", G_CALLBACK(User_callback), NULL);
+    g_signal_connect(Button_User, "clicked", G_CALLBACK(User_callback), NULL);
     gtk_window_present(GTK_WINDOW(MainWindow));  // to show the window.
 }
 
