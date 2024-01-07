@@ -12,6 +12,12 @@
 GtkWidget *login_Admin_username_entry;
 GtkWidget *login_Admin_password_entry;
 
+GtkWidget *register_firstname_entry;
+GtkWidget *register_lastname_entry;
+GtkWidget *register_password_entry;
+GtkWidget *register_email_entry;
+GtkWidget *register_phonenumber_entry;
+
 sqlite3 *db;  // Declare a sqlite Database.
 char *err_msg = 0;
 char sql_db[500];
@@ -75,6 +81,37 @@ static int Rental_GetLastId_callback(void *data, int argc, char **argv,char **az
     return 0;
 }
 
+static void register_callback(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *registerwindow;
+    GtkWidget *register_Button;
+    GtkBox *registerBox;
+    registerwindow = gtk_window_new(); // Create login window.
+    gtk_window_set_title(GTK_WINDOW(registerwindow), "Register Page"); // Set the title of the window
+    registerBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0); // Create register box.
+    gtk_window_set_child(GTK_WINDOW(registerwindow),registerBox);
+    register_firstname_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(register_firstname_entry),"First Name");
+    register_lastname_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(register_lastname_entry),"Last Name");
+    register_password_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(register_password_entry),"Password");
+    gtk_entry_set_visibility(GTK_ENTRY(register_password_entry),FALSE);
+    register_email_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(register_email_entry),"Email Address");
+    register_phonenumber_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(register_phonenumber_entry),"Phone Number");
+    register_Button = gtk_button_new_with_label("Sign Up");
+    gtk_box_append(registerBox,register_firstname_entry);
+    gtk_box_append(registerBox,register_lastname_entry);
+    gtk_box_append(registerBox,register_email_entry);
+    gtk_box_append(registerBox,register_phonenumber_entry);
+    gtk_box_append(registerBox,register_password_entry);
+    gtk_box_append(registerBox,register_Button);
+    //g_signal_connect(register_Button, "clicked", G_CALLBACK(register_database_callback), NULL);
+    gtk_window_present(GTK_WINDOW(registerwindow));
+}
+
 
 static void User_callback(GtkWidget *widget, gpointer data)
 {
@@ -92,7 +129,7 @@ static void User_callback(GtkWidget *widget, gpointer data)
     gtk_box_append(UserBox,Button_User_Login);
     gtk_box_append(UserBox,Button_User_Register);
     gtk_window_present(GTK_WINDOW(UserWindow));  // to show the window.
-    //g_signal_connect(Button_User_Register, "clicked", G_CALLBACK(register_callback), NULL);
+    g_signal_connect(Button_User_Register, "clicked", G_CALLBACK(register_callback), NULL);
     //g_signal_connect(Button_User_Login, "clicked", G_CALLBACK(Login_callback), NULL);
 }
 static void Admin_Login_callback(GtkWidget *widget, gpointer data)
