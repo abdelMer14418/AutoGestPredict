@@ -29,6 +29,10 @@ char sql_db[500];
 sqlite_int64 userid = 0;
 sqlite_int64 Rentalid = 0;
 int isemailfound = -1;
+int islogintrue = -1;
+int current_user_id;
+
+
 
 
 
@@ -76,6 +80,24 @@ void caesar_chiper_decrypt(char* data)
     }
 }
 
+static int client_CheckLoginCredintials_callback(void *data, int argc, char **argv,char **azColName)
+{
+    int result;
+    char*pass_decrypt;
+    pass_decrypt = argv[5];
+    caesar_chiper_decrypt(pass_decrypt);
+    result = strcmp((char*)data,pass_decrypt);
+    printf("%s\n",(char*)data);
+    printf("%s\n",pass_decrypt);
+    if(result == 0)
+    {
+        islogintrue = result;
+        current_user_id = atoi(argv[0]);
+    }
+    //printf("%s",argv[0]);
+    return 0;
+}
+
 
 static int client_GetLastId_callback(void *data, int argc, char **argv,char **azColName)
 {
@@ -96,6 +118,49 @@ static int client_CheckMail_callback(void *data, int argc, char **argv,char **az
         isemailfound = result;
     }
     return 0;
+}
+
+
+static void login_database_callback(GtkWidget *widget,gpointer data)
+{
+    GtkEntryBuffer *databuffer;
+    char* datalogin;
+    char* passlogin;
+    GtkWidget *LoginStatuswindow;
+    GtkWidget *datalabel;
+    GtkBox *User_MenuBox;
+    GtkWidget *Vehicles_Button;
+    GtkWidget *Vehicles_Prediction_Button;
+    GtkCalendar *ReservationCalendar;
+    LoginStatuswindow = gtk_window_new(); // Create login window.
+    User_MenuBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0); // Create login box.
+    gtk_window_set_child(GTK_WINDOW(LoginStatuswindow),User_MenuBox);
+    Vehicles_Button = gtk_button_new_with_label("Available Vehicles");
+    Vehicles_Prediction_Button = gtk_button_new_with_label("Predict Vehicle Cost");
+    // ReservationCalendar = gtk_calendar_new();
+    islogintrue = -1;
+    databuffer = gtk_entry_get_buffer(login_username_entry);
+    datalogin = gtk_entry_buffer_get_text(databuffer);
+    databuffer = gtk_entry_get_buffer(login_password_entry);
+    passlogin = gtk_entry_buffer_get_text(databuffer);
+    sprintf(sql_db,"SELECT * from Clients where Email='%s'",datalogin);
+    sqlite3_exec(db,sql_db,client_CheckLoginCredintials_callback,passlogin,&err_msg);
+
+    if(islogintrue == 0)
+    {
+        // gtk_box_append(User_MenuBox,ReservationCalendar);
+        gtk_box_append(User_MenuBox,Vehicles_Button);
+        gtk_box_append(User_MenuBox,Vehicles_Prediction_Button);
+        //g_signal_connect(Vehicles_Button, "clicked", G_CALLBACK(Vehicle_database_callback), NULL);
+        //g_signal_connect(Vehicles_Prediction_Button, "clicked", G_CALLBACK(admin_prediction_callback), NULL);
+    }
+    else
+    {
+        datalabel = gtk_label_new("Wrong Email or Password!");
+        gtk_box_append(User_MenuBox,datalabel);
+    }
+
+    gtk_window_present(GTK_WINDOW(LoginStatuswindow));
 }
 
 static void register_database_callback(GtkWidget *widget,gpointer data) {
@@ -154,7 +219,7 @@ static void Login_callback(GtkWidget *widget, gpointer data)
     gtk_box_append(loginBox,login_username_entry);
     gtk_box_append(loginBox,login_password_entry);
     gtk_box_append(loginBox,login_Button);
-    //g_signal_connect(login_Button, "clicked", G_CALLBACK(login_database_callback), NULL);
+    g_signal_connect(login_Button, "clicked", G_CALLBACK(login_database_callback), NULL);
     gtk_window_present(GTK_WINDOW(loginwindow));
 }
 
