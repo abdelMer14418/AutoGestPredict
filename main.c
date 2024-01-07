@@ -77,6 +77,28 @@ static int Rental_GetLastId_callback(void *data, int argc, char **argv,char **az
 
 
 
+static void Admin_Login_callback(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *Admin_loginwindow;
+    GtkWidget *Admin_login_Button;
+    GtkBox *Admin_loginBox;
+    GtkPasswordEntry *pass;
+    Admin_loginwindow = gtk_window_new(); // Create login window.
+    gtk_window_set_title(GTK_WINDOW(Admin_loginwindow), "Log in Page"); // Set the title of the window
+    Admin_loginBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0); // Create login box.
+    gtk_window_set_child(GTK_WINDOW(Admin_loginwindow),Admin_loginBox);
+    login_Admin_username_entry = gtk_entry_new();
+    login_Admin_password_entry = gtk_entry_new();
+    gtk_entry_set_visibility(GTK_ENTRY(login_Admin_password_entry),FALSE);
+    Admin_login_Button = gtk_button_new_with_label("Log in");
+    gtk_entry_set_placeholder_text(GTK_ENTRY(login_Admin_username_entry),"Admin Username");
+    gtk_entry_set_placeholder_text(GTK_ENTRY(login_Admin_password_entry),"Admin Password");
+    gtk_box_append(Admin_loginBox,login_Admin_username_entry);
+    gtk_box_append(Admin_loginBox,login_Admin_password_entry);
+    gtk_box_append(Admin_loginBox,Admin_login_Button);
+    //g_signal_connect(Admin_login_Button, "clicked", G_CALLBACK(Admin_login_database_callback), NULL);
+    gtk_window_present(GTK_WINDOW(Admin_loginwindow));
+}
 static void
 activate(GtkApplication *app,
          gpointer user_data)
@@ -96,7 +118,7 @@ activate(GtkApplication *app,
     Button_User = gtk_button_new_with_label("User");
     gtk_box_append(Mainbox,Button_Administrator);
     gtk_box_append(Mainbox,Button_User);
-    //g_signal_connect(Button_Administrator, "clicked", G_CALLBACK(Admin_Login_callback), NULL);
+    g_signal_connect(Button_Administrator, "clicked", G_CALLBACK(Admin_Login_callback), NULL);
     //g_signal_connect(Button_User, "clicked", G_CALLBACK(User_callback), NULL);
     gtk_window_present(GTK_WINDOW(MainWindow));  // to show the window.
 }
