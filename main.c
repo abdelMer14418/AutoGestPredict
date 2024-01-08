@@ -140,6 +140,31 @@ static int client_CheckMail_callback(void *data, int argc, char **argv,char **az
 }
 
 
+static void Administrator_callback(GtkWidget *widget, gpointer data) {
+    GtkWidget *AdminWindow;
+    GtkBox *AdminBox;
+    GtkWidget *Button_Tables_selection;
+    GtkWidget *Button_Car_Management;
+    GtkWidget *Button_User_Management;
+    GtkWidget *Button_Rental_History;
+    AdminWindow = gtk_window_new(); // Create Admin window.
+    gtk_window_set_title(GTK_WINDOW(AdminWindow), "Admin"); // Set the title of the window
+    AdminBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0); // Create Admin box.
+    gtk_window_set_child(GTK_WINDOW(AdminWindow), AdminBox);
+    Button_Tables_selection = gtk_button_new_with_label("Table Selection");
+    Button_Car_Management = gtk_button_new_with_label("Car Prediction");
+    Button_User_Management = gtk_button_new_with_label("User Management");
+    Button_Rental_History = gtk_button_new_with_label("Rental History");
+    gtk_box_append(AdminBox, Button_Tables_selection);
+    gtk_box_append(AdminBox, Button_Car_Management);
+    gtk_box_append(AdminBox, Button_User_Management);
+    gtk_box_append(AdminBox, Button_Rental_History);
+    //g_signal_connect(Button_Tables_selection, "clicked", G_CALLBACK(Admin_tableselection_callback), NULL);
+    //g_signal_connect(Button_Rental_History, "clicked", G_CALLBACK(Admin_RentalHistory_callback), NULL);
+    //g_signal_connect(Button_User_Management, "clicked", G_CALLBACK(users_table_callback), NULL);
+    //g_signal_connect(Button_Car_Management, "clicked", G_CALLBACK(admin_prediction_callback), NULL);
+    gtk_window_present(GTK_WINDOW(AdminWindow));  // to show the window.
+}
 
 static void Admin_login_database_callback(GtkWidget *widget,gpointer data)
 {
@@ -166,7 +191,7 @@ static void Admin_login_database_callback(GtkWidget *widget,gpointer data)
         gtk_box_append(Admin_loginBox,datalabel);
         Admin_proceed_Button = gtk_button_new_with_label("Proceed!");
         gtk_box_append(Admin_loginBox,Admin_proceed_Button);
-        //g_signal_connect(Admin_proceed_Button, "clicked", G_CALLBACK(Administrator_callback), NULL);
+        g_signal_connect(Admin_proceed_Button, "clicked", G_CALLBACK(Administrator_callback), NULL);
     }
     else
     {
