@@ -4,3 +4,4 @@ cmake-build-debug/*
 
 msys64/*
 
+Curl/*
