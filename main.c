@@ -267,7 +267,7 @@ static void login_database_callback(GtkWidget *widget,gpointer data)
         gtk_box_append(User_MenuBox,Vehicles_Button);
         gtk_box_append(User_MenuBox,Vehicles_Prediction_Button);
         //g_signal_connect(Vehicles_Button, "clicked", G_CALLBACK(Vehicle_database_callback), NULL);
-        //g_signal_connect(Vehicles_Prediction_Button, "clicked", G_CALLBACK(admin_prediction_callback), NULL);
+        g_signal_connect(Vehicles_Prediction_Button, "clicked", G_CALLBACK(admin_prediction_callback), NULL);
     }
     else
     {
