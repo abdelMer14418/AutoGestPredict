@@ -1,5 +1,0 @@
-C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/cmake-build-debug/CMakeFiles/sqlite3.dir
-C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/cmake-build-debug/CMakeFiles/sqlite.dir
-C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/cmake-build-debug/CMakeFiles/AutoGestPredict.dir
-C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/cmake-build-debug/CMakeFiles/rebuild_cache.dir
