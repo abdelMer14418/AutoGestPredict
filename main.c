@@ -21,6 +21,12 @@ GtkWidget *register_phonenumber_entry;
 GtkWidget *login_username_entry;
 GtkWidget *login_password_entry;
 
+GtkWidget * Vehicle_PredictionYear_entry;
+GtkWidget * Vehicle_PredictionKm_entry;
+GtkWidget * Vehicle_PredictionHP_entry;
+GtkWidget * Vehicle_PredictionAcc_entry;
+GtkWidget * Vehicle_PredictionContinent_entry;
+
 
 
 sqlite3 *db;  // Declare a sqlite Database.
@@ -139,6 +145,35 @@ static int client_CheckMail_callback(void *data, int argc, char **argv,char **az
     return 0;
 }
 
+static void admin_prediction_callback(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *PredictionWindow;
+    GtkBox *PredictionBox;
+    GtkWidget *Button_Predict;
+    PredictionWindow = gtk_window_new();
+    gtk_window_set_title(GTK_WINDOW(PredictionWindow), "Vehicle Prediction"); // Set the title of the window
+    PredictionBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_window_set_child(GTK_WINDOW(PredictionWindow), PredictionBox);
+    Vehicle_PredictionYear_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_PredictionYear_entry),"Year");
+    Vehicle_PredictionKm_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_PredictionKm_entry),"Kilometer");
+    Vehicle_PredictionHP_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_PredictionHP_entry),"Horse Power");
+    Vehicle_PredictionAcc_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_PredictionAcc_entry),"Accident");
+    Vehicle_PredictionContinent_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_PredictionContinent_entry),"Continent");
+    Button_Predict = gtk_button_new_with_label("Predict");
+    gtk_box_append(PredictionBox, Vehicle_PredictionYear_entry);
+    gtk_box_append(PredictionBox, Vehicle_PredictionKm_entry);
+    gtk_box_append(PredictionBox, Vehicle_PredictionHP_entry);
+    gtk_box_append(PredictionBox, Vehicle_PredictionAcc_entry);
+    gtk_box_append(PredictionBox, Vehicle_PredictionContinent_entry);
+    gtk_box_append(PredictionBox, Button_Predict);
+    //g_signal_connect(Button_Predict, "clicked", G_CALLBACK(PredictionButton_callback), NULL);
+    gtk_window_present(GTK_WINDOW(PredictionWindow));  // to show the window.
+}
 
 static void Administrator_callback(GtkWidget *widget, gpointer data) {
     GtkWidget *AdminWindow;
@@ -162,7 +197,7 @@ static void Administrator_callback(GtkWidget *widget, gpointer data) {
     //g_signal_connect(Button_Tables_selection, "clicked", G_CALLBACK(Admin_tableselection_callback), NULL);
     //g_signal_connect(Button_Rental_History, "clicked", G_CALLBACK(Admin_RentalHistory_callback), NULL);
     //g_signal_connect(Button_User_Management, "clicked", G_CALLBACK(users_table_callback), NULL);
-    //g_signal_connect(Button_Car_Management, "clicked", G_CALLBACK(admin_prediction_callback), NULL);
+    g_signal_connect(Button_Car_Management, "clicked", G_CALLBACK(admin_prediction_callback), NULL);
     gtk_window_present(GTK_WINDOW(AdminWindow));  // to show the window.
 }
 
@@ -232,7 +267,7 @@ static void login_database_callback(GtkWidget *widget,gpointer data)
         gtk_box_append(User_MenuBox,Vehicles_Button);
         gtk_box_append(User_MenuBox,Vehicles_Prediction_Button);
         //g_signal_connect(Vehicles_Button, "clicked", G_CALLBACK(Vehicle_database_callback), NULL);
-        //g_signal_connect(Vehicles_Prediction_Button, "clicked", G_CALLBACK(admin_prediction_callback), NULL);
+        g_signal_connect(Vehicles_Prediction_Button, "clicked", G_CALLBACK(admin_prediction_callback), NULL);
     }
     else
     {
