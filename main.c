@@ -43,7 +43,16 @@ int isadminlogintrue = -1;
 
 
 
-
+enum
+{
+    COL_Vehicle_Id = 0,
+    COL_Brand,
+    COL_Model,
+    COL_Year,
+    COL_Fuel,
+    COL_Transmission,
+    COL_Seating
+} ;
 
 void caesar_chiper_encrypt(char* data)
 {
@@ -143,6 +152,91 @@ static int client_CheckMail_callback(void *data, int argc, char **argv,char **az
         isemailfound = result;
     }
     return 0;
+}
+
+static GtkWidget *
+createvehicle_view_and_model (void)
+{
+    GtkWidget *view = gtk_tree_view_new ();
+
+    GtkCellRenderer *renderer;
+
+    /* --- Column #2 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Vehicle Id",
+                                                 renderer,
+                                                 "text", COL_Vehicle_Id,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Brand",
+                                                 renderer,
+                                                 "text", COL_Brand,
+                                                 NULL);
+
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Model",
+                                                 renderer,
+                                                 "text", COL_Model,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Year",
+                                                 renderer,
+                                                 "text", COL_Year,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Fuel",
+                                                 renderer,
+                                                 "text", COL_Fuel,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Transmission",
+                                                 renderer,
+                                                 "text", COL_Transmission,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Seating Capacity",
+                                                 renderer,
+                                                 "text", COL_Seating,
+                                                 NULL);
+
+
+    return view;
+}
+
+static void Vehicle_database_callback(GtkWidget *widget,gpointer data)
+{
+    GtkWidget *vehicless_window;
+    GtkBox *VehiclesBox;
+    GtkWidget *Vehicles_Button_Selection;
+    vehicless_window = gtk_window_new();
+    VehiclesBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+    gtk_window_set_child(GTK_WINDOW(vehicless_window),VehiclesBox);
+    GtkWidget *Vehiclesview = createvehicle_view_and_model();
+    Vehicles_Button_Selection = gtk_button_new_with_label("Available Vehicles");
+    gtk_box_append(VehiclesBox,Vehiclesview);
+    gtk_box_append(VehiclesBox,Vehicles_Button_Selection);
+    //g_signal_connect(Vehicles_Button_Selection, "clicked", G_CALLBACK(VehicleSelection_database_callback), NULL);
+    gtk_window_present(GTK_WINDOW(vehicless_window));
 }
 
 static void admin_prediction_callback(GtkWidget *widget, gpointer data)
@@ -266,7 +360,7 @@ static void login_database_callback(GtkWidget *widget,gpointer data)
         // gtk_box_append(User_MenuBox,ReservationCalendar);
         gtk_box_append(User_MenuBox,Vehicles_Button);
         gtk_box_append(User_MenuBox,Vehicles_Prediction_Button);
-        //g_signal_connect(Vehicles_Button, "clicked", G_CALLBACK(Vehicle_database_callback), NULL);
+        g_signal_connect(Vehicles_Button, "clicked", G_CALLBACK(Vehicle_database_callback), NULL);
         g_signal_connect(Vehicles_Prediction_Button, "clicked", G_CALLBACK(admin_prediction_callback), NULL);
     }
     else
