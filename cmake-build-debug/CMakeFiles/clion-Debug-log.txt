@@ -1,4 +1,0 @@
-"C:\Program Files\JetBrains\CLion 2023.3.2\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2023.3.2/bin/ninja/win/x64/ninja.exe" -DCMAKE_TOOLCHAIN_FILE=Curl/vcpkg/scripts/buildsystems/vcpkg.cmake -G Ninja -S C:\Users\macil\OneDrive\Bureau\AutoGestPredict -B C:\Users\macil\OneDrive\Bureau\AutoGestPredict\cmake-build-debug
--- Configuring done (2.1s)
--- Generating done (0.2s)
--- Build files have been written to: C:/Users/macil/OneDrive/Bureau/AutoGestPredict/cmake-build-debug
