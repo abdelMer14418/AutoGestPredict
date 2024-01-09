@@ -27,6 +27,8 @@ GtkWidget * Vehicle_PredictionHP_entry;
 GtkWidget * Vehicle_PredictionAcc_entry;
 GtkWidget * Vehicle_PredictionContinent_entry;
 
+GtkListStore *Vehiclesstore;
+
 
 
 sqlite3 *db;  // Declare a sqlite Database.
@@ -51,7 +53,8 @@ enum
     COL_Year,
     COL_Fuel,
     COL_Transmission,
-    COL_Seating
+    COL_Seating,
+    NUM_Vehicle_COLS
 } ;
 
 void caesar_chiper_encrypt(char* data)
@@ -154,6 +157,40 @@ static int client_CheckMail_callback(void *data, int argc, char **argv,char **az
     return 0;
 }
 
+
+static int Vehicles_client_retrieve_callback (void *data, int argc, char **argv,char **azColName)
+{
+    GtkTreeIter iter;
+    gtk_list_store_append (Vehiclesstore, &iter);
+    gtk_list_store_set (Vehiclesstore, &iter,
+                        COL_Vehicle_Id, atoi(argv[0]),
+                        COL_Brand, argv[1],
+                        COL_Model, argv[2],
+                        COL_Year, argv[3],
+                        COL_Fuel,argv[4],
+                        COL_Transmission,argv[5],
+                        COL_Seating,argv[6],
+                        -1);
+    return 0;
+}
+
+static GtkTreeModel *
+createVehicle_and_fill_model (void)
+{
+    Vehiclesstore = gtk_list_store_new (NUM_Vehicle_COLS,
+                                        G_TYPE_UINT,
+                                        G_TYPE_STRING,
+                                        G_TYPE_STRING,
+                                        G_TYPE_STRING,
+                                        G_TYPE_STRING,
+                                        G_TYPE_STRING,
+                                        G_TYPE_STRING);
+    sprintf(sql_db, "SELECT * from Vehicles");
+    sqlite3_exec(db, sql_db, Vehicles_client_retrieve_callback, 0, &err_msg);
+    /* Append a row and fill in some data */
+    return GTK_TREE_MODEL (Vehiclesstore);
+}
+
 static GtkWidget *
 createvehicle_view_and_model (void)
 {
@@ -218,6 +255,15 @@ createvehicle_view_and_model (void)
                                                  renderer,
                                                  "text", COL_Seating,
                                                  NULL);
+    GtkTreeModel *model = createVehicle_and_fill_model ();
+
+    gtk_tree_view_set_model (GTK_TREE_VIEW (view), model);
+
+    /* The tree view has acquired its own reference to the
+     *  model, so we can drop ours. That way the model will
+     *  be freed automatically when the tree view is destroyed
+     */
+    g_object_unref (model);
 
 
     return view;
