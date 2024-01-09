@@ -11,7 +11,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/cmake-build-debug"
+			"value" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/cmake-build-debug"
 		},
 		{
 			"name" : "AutoGestPredict_IS_TOP_LEVEL",
@@ -35,7 +35,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict"
+			"value" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict"
 		},
 		{
 			"name" : "CMAKE_ADDR2LINE",
@@ -91,7 +91,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "c:/Users/macil/OneDrive/Bureau/AutoGestPredict/cmake-build-debug"
+			"value" : "c:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -467,7 +467,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -539,7 +539,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict"
+			"value" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -579,7 +579,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/PROGRA~1/JETBRA~1/CLION2~2.2/bin/ninja/win/x64/ninja.exe"
+			"value" : "C:/Program Files/JetBrains/CLion 2023.3.2/bin/ninja/win/x64/ninja.exe"
 		},
 		{
 			"name" : "CMAKE_MODULE_LINKER_FLAGS",
@@ -1187,7 +1187,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/Curl/vcpkg/installed/x64-windows/share/curl"
+			"value" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/Curl/vcpkg/installed/x64-windows/share/curl"
 		},
 		{
 			"name" : "CURL_LIBRARY_DEBUG",
@@ -1203,7 +1203,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/Curl/vcpkg/installed/x64-windows/debug/lib/libcurl-d.lib"
+			"value" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/Curl/vcpkg/installed/x64-windows/debug/lib/libcurl-d.lib"
 		},
 		{
 			"name" : "CURL_LIBRARY_RELEASE",
@@ -1219,7 +1219,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/Curl/vcpkg/installed/x64-windows/lib/libcurl.lib"
+			"value" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/Curl/vcpkg/installed/x64-windows/lib/libcurl.lib"
 		},
 		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_ZLIB",
@@ -1231,7 +1231,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "[optimized;C:/Users/macil/OneDrive/Bureau/AutoGestPredict/Curl/vcpkg/installed/x64-windows/lib/zlib.lib;debug;C:/Users/macil/OneDrive/Bureau/AutoGestPredict/Curl/vcpkg/installed/x64-windows/debug/lib/zlibd.lib][C:/Users/macil/OneDrive/Bureau/AutoGestPredict/Curl/vcpkg/installed/x64-windows/include][c ][v1.3.0(1)]"
+			"value" : "[optimized;C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/Curl/vcpkg/installed/x64-windows/lib/zlib.lib;debug;C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/Curl/vcpkg/installed/x64-windows/debug/lib/zlibd.lib][C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/Curl/vcpkg/installed/x64-windows/include][c ][v1.3.0(1)]"
 		},
 		{
 			"name" : "VCPKG_APPLOCAL_DEPS",
@@ -1255,7 +1255,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/Curl/vcpkg/installed"
+			"value" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/Curl/vcpkg/installed"
 		},
 		{
 			"name" : "VCPKG_MANIFEST_DIR",
@@ -1395,7 +1395,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/Curl/vcpkg/installed/x64-windows/include"
+			"value" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/Curl/vcpkg/installed/x64-windows/include"
 		},
 		{
 			"name" : "ZLIB_LIBRARY_DEBUG",
@@ -1411,7 +1411,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/Curl/vcpkg/installed/x64-windows/debug/lib/zlibd.lib"
+			"value" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/Curl/vcpkg/installed/x64-windows/debug/lib/zlibd.lib"
 		},
 		{
 			"name" : "ZLIB_LIBRARY_RELEASE",
@@ -1427,7 +1427,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/Curl/vcpkg/installed/x64-windows/lib/zlib.lib"
+			"value" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/Curl/vcpkg/installed/x64-windows/lib/zlib.lib"
 		},
 		{
 			"name" : "Z_VCPKG_BUILTIN_POWERSHELL_PATH",
@@ -1499,7 +1499,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/Curl/vcpkg"
+			"value" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/Curl/vcpkg"
 		},
 		{
 			"name" : "_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",
@@ -1523,7 +1523,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/Curl/vcpkg/installed"
+			"value" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/Curl/vcpkg/installed"
 		}
 	],
 	"kind" : "cache",

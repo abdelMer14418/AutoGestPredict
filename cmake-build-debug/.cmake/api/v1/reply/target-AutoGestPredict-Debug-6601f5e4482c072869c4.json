@@ -207,76 +207,76 @@
 			[
 				{
 					"backtrace" : 10,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/src"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/src"
 				},
 				{
 					"backtrace" : 11,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/include/gtk-4.0"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/include/gtk-4.0"
 				},
 				{
 					"backtrace" : 12,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/include/gtk-4.0/gtk"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/include/gtk-4.0/gtk"
 				},
 				{
 					"backtrace" : 13,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/include/pango-1.0"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/include/pango-1.0"
 				},
 				{
 					"backtrace" : 14,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/include/gdk-pixbuf-2.0"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/include/gdk-pixbuf-2.0"
 				},
 				{
 					"backtrace" : 15,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/include/cairo"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/include/cairo"
 				},
 				{
 					"backtrace" : 16,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/include/harfbuzz"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/include/harfbuzz"
 				},
 				{
 					"backtrace" : 17,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/include/freetype2"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/include/freetype2"
 				},
 				{
 					"backtrace" : 18,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/include/graphene-1.0"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/include/graphene-1.0"
 				},
 				{
 					"backtrace" : 19,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/lib/graphene-1.0/include"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/lib/graphene-1.0/include"
 				},
 				{
 					"backtrace" : 20,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/include"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/include"
 				},
 				{
 					"backtrace" : 21,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/include/glib-2.0"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/include/glib-2.0"
 				},
 				{
 					"backtrace" : 22,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/lib/glib-2.0/include"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/lib/glib-2.0/include"
 				},
 				{
 					"backtrace" : 23,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/include/fribidi"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/include/fribidi"
 				},
 				{
 					"backtrace" : 24,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/include/webp"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/include/webp"
 				},
 				{
 					"backtrace" : 25,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/include/libpng16"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/include/libpng16"
 				},
 				{
 					"backtrace" : 26,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/include/pixman-1"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/include/pixman-1"
 				},
 				{
 					"backtrace" : 27,
 					"isSystem" : true,
-					"path" : "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/Curl/vcpkg/installed/x64-windows/include"
+					"path" : "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/Curl/vcpkg/installed/x64-windows/include"
 				}
 			],
 			"language" : "C",
@@ -321,7 +321,7 @@
 			},
 			{
 				"backtrace" : 3,
-				"fragment" : "-LC:/Users/macil/OneDrive/Bureau/AutoGestPredict/msys64/mingw64/lib",
+				"fragment" : "-LC:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/msys64/mingw64/lib",
 				"role" : "libraries"
 			},
 			{
@@ -391,7 +391,7 @@
 			},
 			{
 				"backtrace" : 9,
-				"fragment" : "C:\\Users\\macil\\OneDrive\\Bureau\\AutoGestPredict\\Curl\\vcpkg\\installed\\x64-windows\\debug\\lib\\libcurl-d.lib",
+				"fragment" : "C:\\Users\\SURFACE\\Desktop\\AutoGestPredict\\AutoGestPredict\\Curl\\vcpkg\\installed\\x64-windows\\debug\\lib\\libcurl-d.lib",
 				"role" : "libraries"
 			},
 			{

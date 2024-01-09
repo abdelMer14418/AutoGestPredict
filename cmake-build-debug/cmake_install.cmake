@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/macil/OneDrive/Bureau/AutoGestPredict
+# Install script for directory: C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/macil/OneDrive/Bureau/AutoGestPredict/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/SURFACE/Desktop/AutoGestPredict/AutoGestPredict/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
