@@ -40,6 +40,7 @@ int isemailfound = -1;
 int islogintrue = -1;
 int current_user_id;
 int isadminlogintrue = -1;
+char carcost[10];
 
 
 
@@ -172,6 +173,80 @@ static int Vehicles_client_retrieve_callback (void *data, int argc, char **argv,
                         COL_Seating,argv[6],
                         -1);
     return 0;
+}
+
+static size_t cb(void *data, size_t size, size_t nmemb, void *clientp)
+{
+    int j =0;
+    for (size_t i = 1445; i <1470;i++)
+    {
+        if (isdigit(((char *)data)[i]) || ((char *)data)[i] == '$' || ((char *)data)[i] == '.')
+        {
+            carcost[j] = ((char *)data)[i];
+            j++;
+        }
+    }
+    carcost[j] = '\0';
+    printf("%s",carcost);
+    // Predictionlabel = gtk_label_new(carcost);
+    // gtk_box_append(PredictionBox, Predictionlabel);
+    return nmemb;
+}
+static void PredictionButton_callback(GtkWidget *widget, gpointer data)
+{
+    CURL *curl;
+    CURLcode res;
+    GtkEntryBuffer *Prediction_databuffer;
+    char *Year, *Km, *Hp, *Acc, *Cont;
+    char request[50];
+    GtkWidget *PredictionResultWindow;
+    GtkWidget *PredictionResultlabel;
+    PredictionResultWindow = gtk_window_new();
+    gtk_window_set_title(GTK_WINDOW(PredictionResultWindow), "Vehicle Predicted Cost"); // Set the title of the window
+    curl_global_init(CURL_GLOBAL_ALL);
+    curl = curl_easy_init();
+    Prediction_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_PredictionYear_entry));
+    Year = gtk_entry_buffer_get_text(Prediction_databuffer);
+
+    Prediction_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_PredictionKm_entry));
+    Km = gtk_entry_buffer_get_text(Prediction_databuffer);
+
+    Prediction_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_PredictionHP_entry));
+    Hp = gtk_entry_buffer_get_text(Prediction_databuffer);
+
+    Prediction_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_PredictionAcc_entry));
+    Acc = gtk_entry_buffer_get_text(Prediction_databuffer);
+
+    Prediction_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_PredictionContinent_entry));
+    Cont = gtk_entry_buffer_get_text(Prediction_databuffer);
+    sprintf(request,"a=%s&b=%s&c=%s&d=%s&e=%s",Year,Km,Hp,Acc,Cont);
+    printf("%s",request);
+    if(curl) {
+        /* First set the URL that is about to receive our POST. This URL can
+           just as well be an https:// URL if that is what should receive the
+           data. */
+
+        curl_easy_setopt(curl, CURLOPT_URL, "http://127.0.0.1:5000/predict");
+        /* Now specify the POST data */
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, cb);
+        /* Perform the request, res will get the return code */
+        res = curl_easy_perform(curl);
+        /* Check for errors */
+        if(res != CURLE_OK)
+            fprintf(stderr, "curl_easy_perform() failed: %s\n",
+                    curl_easy_strerror(res));
+        else
+        {
+            PredictionResultlabel = gtk_label_new(carcost);
+            gtk_window_set_child(GTK_WINDOW(PredictionResultWindow), PredictionResultlabel);
+            gtk_window_present(GTK_WINDOW(PredictionResultWindow));  // to show the window.
+        }
+
+
+        /* always cleanup */
+        curl_easy_cleanup(curl);
+    }
 }
 
 static GtkTreeModel *
@@ -311,7 +386,7 @@ static void admin_prediction_callback(GtkWidget *widget, gpointer data)
     gtk_box_append(PredictionBox, Vehicle_PredictionAcc_entry);
     gtk_box_append(PredictionBox, Vehicle_PredictionContinent_entry);
     gtk_box_append(PredictionBox, Button_Predict);
-    //g_signal_connect(Button_Predict, "clicked", G_CALLBACK(PredictionButton_callback), NULL);
+    g_signal_connect(Button_Predict, "clicked", G_CALLBACK(PredictionButton_callback), NULL);
     gtk_window_present(GTK_WINDOW(PredictionWindow));  // to show the window.
 }
 
