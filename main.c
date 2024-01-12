@@ -277,28 +277,7 @@ static void PredictionButton_callback(GtkWidget *widget, gpointer data)
     }
 }
 
-static void Admin_tableselection_callback(GtkWidget *widget,gpointer data)
-{
-    GtkWidget *TablesWindow;
-    GtkBox *TablesBox;
-    GtkWidget *User_Button;
-    GtkWidget *Rentals_Button;
-    GtkWidget *Vehicles_Button;
-    TablesWindow = gtk_window_new(); // Create login window.
-    gtk_window_set_title(GTK_WINDOW(TablesWindow), "Tables"); // Set the title of the window
-    TablesBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0); // Create login box.
-    gtk_window_set_child(GTK_WINDOW(TablesWindow),TablesBox);
-    User_Button = gtk_button_new_with_label("Users");
-    Rentals_Button = gtk_button_new_with_label("Rentals");
-    Vehicles_Button = gtk_button_new_with_label("Vehicles");
-    gtk_box_append(TablesBox,User_Button);
-    gtk_box_append(TablesBox,Rentals_Button);
-    gtk_box_append(TablesBox,Vehicles_Button);
-    //g_signal_connect(User_Button, "clicked", G_CALLBACK(users_table_callback), NULL);
-    //g_signal_connect(Rentals_Button, "clicked", G_CALLBACK(Rentals_table_callback), NULL);
-    //g_signal_connect(Vehicles_Button, "clicked", G_CALLBACK(Vehicles_table_callback), NULL);
-    gtk_window_present(GTK_WINDOW(TablesWindow));
-}
+
 
 
 static GtkTreeModel *
@@ -460,7 +439,6 @@ create_view_and_model (void)
                                                  "text", COL_Number,
                                                  NULL);
 
-    //GtkTreeModel *model = create_and_fill_model ();
     GtkTreeModel *model = create_and_fill_model ();
 
     gtk_tree_view_set_model (GTK_TREE_VIEW (view), model);
@@ -514,6 +492,28 @@ static void users_table_callback(GtkWidget *widget,gpointer data)
     //g_signal_connect(User_Update_Button, "clicked", G_CALLBACK(admin_user_Update_entry), NULL);
     //g_signal_connect(User_Read_Button, "clicked", G_CALLBACK(admin_user_Read_entry), NULL);
     gtk_window_present(GTK_WINDOW(users_window));
+}
+static void Admin_tableselection_callback(GtkWidget *widget,gpointer data)
+{
+    GtkWidget *TablesWindow;
+    GtkBox *TablesBox;
+    GtkWidget *User_Button;
+    GtkWidget *Rentals_Button;
+    GtkWidget *Vehicles_Button;
+    TablesWindow = gtk_window_new(); // Create login window.
+    gtk_window_set_title(GTK_WINDOW(TablesWindow), "Tables"); // Set the title of the window
+    TablesBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0); // Create login box.
+    gtk_window_set_child(GTK_WINDOW(TablesWindow),TablesBox);
+    User_Button = gtk_button_new_with_label("Users");
+    Rentals_Button = gtk_button_new_with_label("Rentals");
+    Vehicles_Button = gtk_button_new_with_label("Vehicles");
+    gtk_box_append(TablesBox,User_Button);
+    gtk_box_append(TablesBox,Rentals_Button);
+    gtk_box_append(TablesBox,Vehicles_Button);
+    g_signal_connect(User_Button, "clicked", G_CALLBACK(users_table_callback), NULL);
+    //g_signal_connect(Rentals_Button, "clicked", G_CALLBACK(Rentals_table_callback), NULL);
+    //g_signal_connect(Vehicles_Button, "clicked", G_CALLBACK(Vehicles_table_callback), NULL);
+    gtk_window_present(GTK_WINDOW(TablesWindow));
 }
 
 static void Vehicle_database_callback(GtkWidget *widget,gpointer data)
