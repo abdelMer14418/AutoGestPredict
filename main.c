@@ -28,6 +28,8 @@ GtkWidget * Vehicle_PredictionAcc_entry;
 GtkWidget * Vehicle_PredictionContinent_entry;
 
 GtkListStore *Vehiclesstore;
+GtkListStore *store;
+
 
 
 
@@ -181,6 +183,20 @@ static int Vehicles_client_retrieve_callback (void *data, int argc, char **argv,
                         COL_Fuel,argv[4],
                         COL_Transmission,argv[5],
                         COL_Seating,argv[6],
+                        -1);
+    return 0;
+}
+
+static int admin_client_retrieve_callback (void *data, int argc, char **argv,char **azColName)
+{
+    GtkTreeIter iter;
+    gtk_list_store_append (store, &iter);
+    gtk_list_store_set (store, &iter,
+                        COL_Id, atoi(argv[0]),
+                        COL_First_NAME, argv[2],
+                        COL_Last_Name, argv[1],
+                        COL_Email,argv[3],
+                        COL_Number,argv[4],
                         -1);
     return 0;
 }
@@ -380,6 +396,21 @@ createvehicle_view_and_model (void)
     return view;
 }
 
+static GtkTreeModel *
+create_and_fill_model (void)
+{
+    store = gtk_list_store_new (NUM_COLS,
+                                G_TYPE_UINT,
+                                G_TYPE_STRING,
+                                G_TYPE_STRING,
+                                G_TYPE_STRING,
+                                G_TYPE_STRING);
+    sprintf(sql_db, "SELECT * from Clients");
+    sqlite3_exec(db, sql_db, admin_client_retrieve_callback, 0, &err_msg);
+    /* Append a row and fill in some data */
+    return GTK_TREE_MODEL (store);
+}
+
 static GtkWidget *
 create_view_and_model (void)
 {
@@ -430,6 +461,15 @@ create_view_and_model (void)
                                                  NULL);
 
     //GtkTreeModel *model = create_and_fill_model ();
+    GtkTreeModel *model = create_and_fill_model ();
+
+    gtk_tree_view_set_model (GTK_TREE_VIEW (view), model);
+
+    /* The tree view has acquired its own reference to the
+     *  model, so we can drop ours. That way the model will
+     *  be freed automatically when the tree view is destroyed
+     */
+    g_object_unref (model);
 
 
 
