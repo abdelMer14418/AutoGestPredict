@@ -58,6 +58,16 @@ enum
     NUM_Vehicle_COLS
 } ;
 
+enum
+{
+    COL_Id = 0,
+    COL_First_NAME,
+    COL_Last_Name,
+    COL_Email,
+    COL_Number,
+    NUM_COLS
+} ;
+
 void caesar_chiper_encrypt(char* data)
 {
     int key = 6;
@@ -370,6 +380,90 @@ createvehicle_view_and_model (void)
     return view;
 }
 
+static GtkWidget *
+create_view_and_model (void)
+{
+    GtkWidget *view = gtk_tree_view_new ();
+
+    GtkCellRenderer *renderer;
+
+    /* --- Column #2 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "User Id",
+                                                 renderer,
+                                                 "text", COL_Id,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "First Name",
+                                                 renderer,
+                                                 "text", COL_First_NAME,
+                                                 NULL);
+
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Last Name",
+                                                 renderer,
+                                                 "text", COL_Last_Name,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Email",
+                                                 renderer,
+                                                 "text", COL_Email,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Phone Number",
+                                                 renderer,
+                                                 "text", COL_Number,
+                                                 NULL);
+
+    //GtkTreeModel *model = create_and_fill_model ();
+
+
+
+    return view;
+}
+
+static void users_table_callback(GtkWidget *widget,gpointer data)
+{
+    GtkWidget *users_window;
+    GtkBox *UsersTableBox;
+    GtkWidget *User_Create_Button;
+    GtkWidget *User_Read_Button;
+    GtkWidget *User_Delete_Button;
+    GtkWidget *User_Update_Button;
+    users_window = gtk_window_new();
+    UsersTableBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+    GtkWidget *view = create_view_and_model();
+    gtk_window_set_child(GTK_WINDOW(users_window),UsersTableBox);
+    User_Create_Button = gtk_button_new_with_label("Create");
+    User_Read_Button = gtk_button_new_with_label("Read");
+    User_Delete_Button = gtk_button_new_with_label("Delete");
+    User_Update_Button = gtk_button_new_with_label("Update");
+    gtk_box_append(UsersTableBox,view);
+    gtk_box_append(UsersTableBox,User_Create_Button);
+    gtk_box_append(UsersTableBox,User_Read_Button);
+    gtk_box_append(UsersTableBox,User_Delete_Button);
+    gtk_box_append(UsersTableBox,User_Update_Button);
+    //g_signal_connect(User_Create_Button, "clicked", G_CALLBACK(register_callback), NULL);
+    //g_signal_connect(User_Delete_Button, "clicked", G_CALLBACK(admin_user_Delete), NULL);
+    //g_signal_connect(User_Update_Button, "clicked", G_CALLBACK(admin_user_Update_entry), NULL);
+    //g_signal_connect(User_Read_Button, "clicked", G_CALLBACK(admin_user_Read_entry), NULL);
+    gtk_window_present(GTK_WINDOW(users_window));
+}
+
 static void Vehicle_database_callback(GtkWidget *widget,gpointer data)
 {
     GtkWidget *vehicless_window;
@@ -437,7 +531,7 @@ static void Administrator_callback(GtkWidget *widget, gpointer data) {
     gtk_box_append(AdminBox, Button_Rental_History);
     g_signal_connect(Button_Tables_selection, "clicked", G_CALLBACK(Admin_tableselection_callback), NULL);
     //g_signal_connect(Button_Rental_History, "clicked", G_CALLBACK(Admin_RentalHistory_callback), NULL);
-    //g_signal_connect(Button_User_Management, "clicked", G_CALLBACK(users_table_callback), NULL);
+    g_signal_connect(Button_User_Management, "clicked", G_CALLBACK(users_table_callback), NULL);
     g_signal_connect(Button_Car_Management, "clicked", G_CALLBACK(admin_prediction_callback), NULL);
     gtk_window_present(GTK_WINDOW(AdminWindow));  // to show the window.
 }
