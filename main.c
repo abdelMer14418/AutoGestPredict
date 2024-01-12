@@ -192,6 +192,8 @@ static size_t cb(void *data, size_t size, size_t nmemb, void *clientp)
     // gtk_box_append(PredictionBox, Predictionlabel);
     return nmemb;
 }
+
+
 static void PredictionButton_callback(GtkWidget *widget, gpointer data)
 {
     CURL *curl;
@@ -248,6 +250,30 @@ static void PredictionButton_callback(GtkWidget *widget, gpointer data)
         curl_easy_cleanup(curl);
     }
 }
+
+static void Admin_tableselection_callback(GtkWidget *widget,gpointer data)
+{
+    GtkWidget *TablesWindow;
+    GtkBox *TablesBox;
+    GtkWidget *User_Button;
+    GtkWidget *Rentals_Button;
+    GtkWidget *Vehicles_Button;
+    TablesWindow = gtk_window_new(); // Create login window.
+    gtk_window_set_title(GTK_WINDOW(TablesWindow), "Tables"); // Set the title of the window
+    TablesBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0); // Create login box.
+    gtk_window_set_child(GTK_WINDOW(TablesWindow),TablesBox);
+    User_Button = gtk_button_new_with_label("Users");
+    Rentals_Button = gtk_button_new_with_label("Rentals");
+    Vehicles_Button = gtk_button_new_with_label("Vehicles");
+    gtk_box_append(TablesBox,User_Button);
+    gtk_box_append(TablesBox,Rentals_Button);
+    gtk_box_append(TablesBox,Vehicles_Button);
+    //g_signal_connect(User_Button, "clicked", G_CALLBACK(users_table_callback), NULL);
+    //g_signal_connect(Rentals_Button, "clicked", G_CALLBACK(Rentals_table_callback), NULL);
+    //g_signal_connect(Vehicles_Button, "clicked", G_CALLBACK(Vehicles_table_callback), NULL);
+    gtk_window_present(GTK_WINDOW(TablesWindow));
+}
+
 
 static GtkTreeModel *
 createVehicle_and_fill_model (void)
@@ -409,7 +435,7 @@ static void Administrator_callback(GtkWidget *widget, gpointer data) {
     gtk_box_append(AdminBox, Button_Car_Management);
     gtk_box_append(AdminBox, Button_User_Management);
     gtk_box_append(AdminBox, Button_Rental_History);
-    //g_signal_connect(Button_Tables_selection, "clicked", G_CALLBACK(Admin_tableselection_callback), NULL);
+    g_signal_connect(Button_Tables_selection, "clicked", G_CALLBACK(Admin_tableselection_callback), NULL);
     //g_signal_connect(Button_Rental_History, "clicked", G_CALLBACK(Admin_RentalHistory_callback), NULL);
     //g_signal_connect(Button_User_Management, "clicked", G_CALLBACK(users_table_callback), NULL);
     g_signal_connect(Button_Car_Management, "clicked", G_CALLBACK(admin_prediction_callback), NULL);
