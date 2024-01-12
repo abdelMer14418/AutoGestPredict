@@ -7,3 +7,6 @@ Curl/*
 
 cmake-build-debug/*
 
+Car/venv/*
+
+
