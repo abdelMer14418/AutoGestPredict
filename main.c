@@ -436,6 +436,18 @@ create_view_and_model (void)
     return view;
 }
 
+static void Admin_RentalHistory_callback(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *AdminRentalHistory_window;
+    GtkBox *RentalHistoryBox;
+    AdminRentalHistory_window = gtk_window_new();
+    gtk_window_set_title(GTK_WINDOW(AdminRentalHistory_window), "Rental History"); // Set the title of the window
+    RentalHistoryBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+    gtk_window_set_child(GTK_WINDOW(AdminRentalHistory_window), RentalHistoryBox);
+
+    gtk_window_present(GTK_WINDOW(AdminRentalHistory_window));  // to show the window.
+}
+
 static void users_table_callback(GtkWidget *widget,gpointer data)
 {
     GtkWidget *users_window;
@@ -530,7 +542,7 @@ static void Administrator_callback(GtkWidget *widget, gpointer data) {
     gtk_box_append(AdminBox, Button_User_Management);
     gtk_box_append(AdminBox, Button_Rental_History);
     g_signal_connect(Button_Tables_selection, "clicked", G_CALLBACK(Admin_tableselection_callback), NULL);
-    //g_signal_connect(Button_Rental_History, "clicked", G_CALLBACK(Admin_RentalHistory_callback), NULL);
+    g_signal_connect(Button_Rental_History, "clicked", G_CALLBACK(Admin_RentalHistory_callback), NULL);
     g_signal_connect(Button_User_Management, "clicked", G_CALLBACK(users_table_callback), NULL);
     g_signal_connect(Button_Car_Management, "clicked", G_CALLBACK(admin_prediction_callback), NULL);
     gtk_window_present(GTK_WINDOW(AdminWindow));  // to show the window.
