@@ -27,6 +27,8 @@ GtkWidget * Vehicle_PredictionHP_entry;
 GtkWidget * Vehicle_PredictionAcc_entry;
 GtkWidget * Vehicle_PredictionContinent_entry;
 
+GtkWidget *admin_deleteId_entry;
+
 GtkListStore *Vehiclesstore;
 GtkListStore *store;
 
@@ -453,6 +455,33 @@ create_view_and_model (void)
 
     return view;
 }
+static void Admin_users_Delete_Request_callback(GtkWidget *widget,gpointer data)
+{
+    GtkEntryBuffer *deleted_id_databuffer;
+    const char* deleted_id;
+    deleted_id_databuffer = gtk_entry_get_buffer(GTK_ENTRY(admin_deleteId_entry));
+    deleted_id = gtk_entry_buffer_get_text(deleted_id_databuffer);
+    printf("%s\n",deleted_id);
+    sprintf(sql_db,"DELETE from Clients where User_Id=%s",deleted_id);
+    sqlite3_exec(db, sql_db, 0, 0, &err_msg);
+    printf("%s",sql_db);
+}
+static void admin_user_Delete(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *users_delete_window;
+    GtkBox *UsersdeleteBox;
+    GtkWidget *User_Delete_Button;
+    users_delete_window = gtk_window_new();
+    UsersdeleteBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+    gtk_window_set_child(GTK_WINDOW(users_delete_window),UsersdeleteBox);
+    admin_deleteId_entry = gtk_entry_new();
+    User_Delete_Button = gtk_button_new_with_label("Delete");
+    gtk_entry_set_placeholder_text(GTK_ENTRY(admin_deleteId_entry),"Enter the ID");
+    gtk_box_append(UsersdeleteBox,admin_deleteId_entry);
+    gtk_box_append(UsersdeleteBox,User_Delete_Button);
+    g_signal_connect(User_Delete_Button, "clicked", G_CALLBACK(Admin_users_Delete_Request_callback), NULL);
+    gtk_window_present(GTK_WINDOW(users_delete_window));
+}
 
 static void Admin_RentalHistory_callback(GtkWidget *widget, gpointer data)
 {
@@ -555,7 +584,7 @@ static void users_table_callback(GtkWidget *widget,gpointer data)
     gtk_box_append(UsersTableBox,User_Delete_Button);
     gtk_box_append(UsersTableBox,User_Update_Button);
     g_signal_connect(User_Create_Button, "clicked", G_CALLBACK(register_callback), NULL);
-    //g_signal_connect(User_Delete_Button, "clicked", G_CALLBACK(admin_user_Delete), NULL);
+    g_signal_connect(User_Delete_Button, "clicked", G_CALLBACK(admin_user_Delete), NULL);
     //g_signal_connect(User_Update_Button, "clicked", G_CALLBACK(admin_user_Update_entry), NULL);
     //g_signal_connect(User_Read_Button, "clicked", G_CALLBACK(admin_user_Read_entry), NULL);
     gtk_window_present(GTK_WINDOW(users_window));
