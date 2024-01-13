@@ -925,6 +925,29 @@ static void Rentals_table_callback(GtkWidget *widget,gpointer data)
     gtk_box_append(RentalsTableBox,Rentals_Update_Button);
     gtk_window_present(GTK_WINDOW(Rentals_window));
 }
+static void Vehicles_table_callback(GtkWidget *widget,gpointer data)
+{
+    GtkWidget *Vehicles_window;
+    GtkBox *VehiclesTableBox;
+    GtkWidget *Vehicles_Create_Button;
+    GtkWidget *Vehicles_Read_Button;
+    GtkWidget *Vehicles_Delete_Button;
+    GtkWidget *Vehicles_Update_Button;
+    Vehicles_window = gtk_window_new();
+    VehiclesTableBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+    GtkWidget *view = createvehicle_view_and_model();
+    gtk_window_set_child(GTK_WINDOW(Vehicles_window),VehiclesTableBox);
+    Vehicles_Create_Button = gtk_button_new_with_label("Create");
+    Vehicles_Read_Button = gtk_button_new_with_label("Read");
+    Vehicles_Delete_Button = gtk_button_new_with_label("Delete");
+    Vehicles_Update_Button = gtk_button_new_with_label("Update");
+    gtk_box_append(VehiclesTableBox,view);
+    gtk_box_append(VehiclesTableBox,Vehicles_Create_Button);
+    gtk_box_append(VehiclesTableBox,Vehicles_Read_Button);
+    gtk_box_append(VehiclesTableBox,Vehicles_Delete_Button);
+    gtk_box_append(VehiclesTableBox,Vehicles_Update_Button);
+    gtk_window_present(GTK_WINDOW(Vehicles_window));
+}
 static void Admin_tableselection_callback(GtkWidget *widget,gpointer data)
 {
     GtkWidget *TablesWindow;
@@ -944,7 +967,7 @@ static void Admin_tableselection_callback(GtkWidget *widget,gpointer data)
     gtk_box_append(TablesBox,Vehicles_Button);
     g_signal_connect(User_Button, "clicked", G_CALLBACK(users_table_callback), NULL);
     g_signal_connect(Rentals_Button, "clicked", G_CALLBACK(Rentals_table_callback), NULL);
-    //g_signal_connect(Vehicles_Button, "clicked", G_CALLBACK(Vehicles_table_callback), NULL);
+    g_signal_connect(Vehicles_Button, "clicked", G_CALLBACK(Vehicles_table_callback), NULL);
     gtk_window_present(GTK_WINDOW(TablesWindow));
 }
 
