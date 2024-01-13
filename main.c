@@ -34,6 +34,7 @@ GtkWidget *admin_Readuser_entry;
 GtkListStore *Vehiclesstore;
 GtkListStore *store;
 GtkListStore *Readstore;
+GtkListStore *RentalHistory;
 
 GtkWidget *Update_Id_entry;
 GtkWidget *Update_firstname_entry;
@@ -81,6 +82,18 @@ enum
     COL_Email,
     COL_Number,
     NUM_COLS
+} ;
+
+enum
+{
+    COL_RentalHistory_RentalId = 0,
+    COL_RentalHistory_UserId,
+    COL_RentalHistory_StartDate,
+    COL_RentalHistory_EndData,
+    COL_RentalHistory_Cost,
+    COL_RentalHistory_Status,
+    COL_RentalHistory_VehicleId,
+    NUM_RentalHistory_COLS
 } ;
 
 void caesar_chiper_encrypt(char* data)
@@ -402,6 +415,37 @@ create_and_fill_model (void)
     /* Append a row and fill in some data */
     return GTK_TREE_MODEL (store);
 }
+static int admin_RentalHistory_retrieve_callback (void *data, int argc, char **argv,char **azColName)
+{
+    GtkTreeIter iter;
+    gtk_list_store_append (RentalHistory, &iter);
+    gtk_list_store_set (RentalHistory, &iter,
+                        COL_RentalHistory_RentalId, atoi(argv[0]),
+                        COL_RentalHistory_UserId, atoi(argv[2]),
+                        COL_RentalHistory_StartDate, argv[1],
+                        COL_RentalHistory_EndData,argv[3],
+                        COL_RentalHistory_Cost,atoi(argv[4]),
+                        COL_RentalHistory_Status,argv[5],
+                        COL_RentalHistory_VehicleId,atoi(argv[6]),
+                        -1);
+    return 0;
+}
+static GtkTreeModel *
+RantalHistory_create_and_fill_model (void)
+{
+    RentalHistory = gtk_list_store_new (NUM_RentalHistory_COLS,
+                                        G_TYPE_UINT,
+                                        G_TYPE_UINT,
+                                        G_TYPE_STRING,
+                                        G_TYPE_STRING,
+                                        G_TYPE_UINT,
+                                        G_TYPE_STRING,
+                                        G_TYPE_UINT);
+    sprintf(sql_db, "SELECT * from Rentals");
+    sqlite3_exec(db, sql_db, admin_RentalHistory_retrieve_callback, 0, &err_msg);
+    /* Append a row and fill in some data */
+    return GTK_TREE_MODEL (RentalHistory);
+}
 
 static GtkWidget *
 create_view_and_model (void)
@@ -494,6 +538,83 @@ static void admin_user_Delete(GtkWidget *widget, gpointer data)
     gtk_window_present(GTK_WINDOW(users_delete_window));
 }
 
+static GtkWidget *
+RentalHistory_create_view_and_model (void)
+{
+    GtkWidget *view = gtk_tree_view_new ();
+
+    GtkCellRenderer *renderer;
+
+    /* --- Column #2 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Rental Id",
+                                                 renderer,
+                                                 "text", COL_RentalHistory_RentalId,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "User Id",
+                                                 renderer,
+                                                 "text", COL_RentalHistory_UserId,
+                                                 NULL);
+
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Start Date",
+                                                 renderer,
+                                                 "text", COL_RentalHistory_StartDate,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "End Date",
+                                                 renderer,
+                                                 "text", COL_RentalHistory_EndData,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Cost",
+                                                 renderer,
+                                                 "text", COL_RentalHistory_Cost,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Status",
+                                                 renderer,
+                                                 "text", COL_RentalHistory_Status,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Vehicle Id",
+                                                 renderer,
+                                                 "text", COL_RentalHistory_VehicleId,
+                                                 NULL);
+
+    GtkTreeModel *model = RantalHistory_create_and_fill_model();
+
+    gtk_tree_view_set_model (GTK_TREE_VIEW (view), model);
+
+    /* The tree view has acquired its own reference to the
+     *  model, so we can drop ours. That way the model will
+     *  be freed automatically when the tree view is destroyed
+     */
+    g_object_unref (model);
+
+    return view;
+}
 static void Admin_RentalHistory_callback(GtkWidget *widget, gpointer data)
 {
     GtkWidget *AdminRentalHistory_window;
@@ -502,7 +623,8 @@ static void Admin_RentalHistory_callback(GtkWidget *widget, gpointer data)
     gtk_window_set_title(GTK_WINDOW(AdminRentalHistory_window), "Rental History"); // Set the title of the window
     RentalHistoryBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
     gtk_window_set_child(GTK_WINDOW(AdminRentalHistory_window), RentalHistoryBox);
-
+    GtkWidget *view = RentalHistory_create_view_and_model();
+    gtk_box_append(RentalHistoryBox, view);
     gtk_window_present(GTK_WINDOW(AdminRentalHistory_window));  // to show the window.
 }
 static void register_database_callback(GtkWidget *widget,gpointer data) {
