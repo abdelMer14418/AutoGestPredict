@@ -28,9 +28,13 @@ GtkWidget * Vehicle_PredictionAcc_entry;
 GtkWidget * Vehicle_PredictionContinent_entry;
 
 GtkWidget *admin_deleteId_entry;
+GtkWidget *admin_Readuser_entry;
+
 
 GtkListStore *Vehiclesstore;
 GtkListStore *store;
+GtkListStore *Readstore;
+
 
 
 
@@ -561,6 +565,128 @@ static void register_callback(GtkWidget *widget, gpointer data)
     g_signal_connect(register_Button, "clicked", G_CALLBACK(register_database_callback), NULL);
     gtk_window_present(GTK_WINDOW(registerwindow));
 }
+static int admin_client_Read_callback (void *data, int argc, char **argv,char **azColName)
+{
+    GtkTreeIter iter;
+    gtk_list_store_append (Readstore, &iter);
+    gtk_list_store_set (Readstore, &iter,
+                        COL_Id, atoi(argv[0]),
+                        COL_First_NAME, argv[2],
+                        COL_Last_Name, argv[1],
+                        COL_Email,argv[3],
+                        COL_Number,argv[4],
+                        -1);
+    return 0;
+}
+
+
+static GtkTreeModel *
+UserReadcreate_and_fill_model (char*data)
+{
+    Readstore = gtk_list_store_new (NUM_COLS,
+                                    G_TYPE_UINT,
+                                    G_TYPE_STRING,
+                                    G_TYPE_STRING,
+                                    G_TYPE_STRING,
+                                    G_TYPE_STRING);
+    sprintf(sql_db, "SELECT * from Clients WHERE User_Id = %s ",data);
+    sqlite3_exec(db, sql_db, admin_client_Read_callback, 0, &err_msg);
+    /* Append a row and fill in some data */
+    return GTK_TREE_MODEL (Readstore);
+}
+
+static GtkWidget *
+UserReadcreate_view_and_model (char*data)
+{
+    GtkWidget *view = gtk_tree_view_new ();
+
+    GtkCellRenderer *renderer;
+
+    /* --- Column #2 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "User Id",
+                                                 renderer,
+                                                 "text", COL_Id,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "First Name",
+                                                 renderer,
+                                                 "text", COL_First_NAME,
+                                                 NULL);
+
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Last Name",
+                                                 renderer,
+                                                 "text", COL_Last_Name,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Email",
+                                                 renderer,
+                                                 "text", COL_Email,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Phone Number",
+                                                 renderer,
+                                                 "text", COL_Number,
+                                                 NULL);
+
+    GtkTreeModel *model = UserReadcreate_and_fill_model (data);
+
+    gtk_tree_view_set_model (GTK_TREE_VIEW (view), model);
+
+    /* The tree view has acquired its own reference to the
+     *  model, so we can drop ours. That way the model will
+     *  be freed automatically when the tree view is destroyed
+     */
+    g_object_unref (model);
+
+    return view;
+}
+static void Admin_users_Read_Request_callback(GtkWidget *widget,gpointer data)
+{
+    GtkWidget *users_window;
+    GtkBox *UsersTableBox;
+    GtkEntryBuffer *Read_databuffer;
+    users_window = gtk_window_new();
+    char* id;
+    UsersTableBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+    Read_databuffer = gtk_entry_get_buffer(GTK_ENTRY(admin_Readuser_entry));
+    id = gtk_entry_buffer_get_text(Read_databuffer);
+    GtkWidget *view = UserReadcreate_view_and_model(id);
+    gtk_window_set_child(GTK_WINDOW(users_window),UsersTableBox);
+    gtk_box_append(UsersTableBox,view);
+    gtk_window_present(GTK_WINDOW(users_window));
+}
+static void admin_user_Read_entry(GtkWidget *widget,gpointer data)
+{
+    GtkWidget *users_Read_window;
+    GtkBox *UsersReadBox;
+    GtkWidget *User_Read_Button;
+    users_Read_window = gtk_window_new();
+    UsersReadBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+    gtk_window_set_child(GTK_WINDOW(users_Read_window),UsersReadBox);
+    admin_Readuser_entry = gtk_entry_new();
+    User_Read_Button = gtk_button_new_with_label("Read");
+    gtk_entry_set_placeholder_text(GTK_ENTRY(admin_Readuser_entry),"Enter the ID");
+    gtk_box_append(UsersReadBox,admin_Readuser_entry);
+    gtk_box_append(UsersReadBox,User_Read_Button);
+    g_signal_connect(User_Read_Button, "clicked", G_CALLBACK(Admin_users_Read_Request_callback), NULL);
+    gtk_window_present(GTK_WINDOW(users_Read_window));
+}
 
 static void users_table_callback(GtkWidget *widget,gpointer data)
 {
@@ -586,7 +712,7 @@ static void users_table_callback(GtkWidget *widget,gpointer data)
     g_signal_connect(User_Create_Button, "clicked", G_CALLBACK(register_callback), NULL);
     g_signal_connect(User_Delete_Button, "clicked", G_CALLBACK(admin_user_Delete), NULL);
     //g_signal_connect(User_Update_Button, "clicked", G_CALLBACK(admin_user_Update_entry), NULL);
-    //g_signal_connect(User_Read_Button, "clicked", G_CALLBACK(admin_user_Read_entry), NULL);
+    g_signal_connect(User_Read_Button, "clicked", G_CALLBACK(admin_user_Read_entry), NULL);
     gtk_window_present(GTK_WINDOW(users_window));
 }
 static void Admin_tableselection_callback(GtkWidget *widget,gpointer data)
