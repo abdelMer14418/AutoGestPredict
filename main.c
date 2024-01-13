@@ -933,6 +933,27 @@ static void Rentals_table_callback(GtkWidget *widget,gpointer data)
     gtk_box_append(RentalsTableBox,Rentals_Update_Button);
     gtk_window_present(GTK_WINDOW(Rentals_window));
 }
+static void Admin_VehicleCreateButton_callback(GtkWidget *widget,gpointer data)
+{
+    GtkEntryBuffer *CreateVehicle_databuffer;
+    char *VehicleId, *Brand, *Model, *Year, *Fuel, *Transmission, *Seating;
+    CreateVehicle_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_VehicleId_entry));
+    VehicleId = gtk_entry_buffer_get_text(CreateVehicle_databuffer);
+    CreateVehicle_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_Brand_entry));
+    Brand = gtk_entry_buffer_get_text(CreateVehicle_databuffer);
+    CreateVehicle_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_Model_entry));
+    Model = gtk_entry_buffer_get_text(CreateVehicle_databuffer);
+    CreateVehicle_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_Year_entry));
+    Year = gtk_entry_buffer_get_text(CreateVehicle_databuffer);
+    CreateVehicle_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_Fuel_entry));
+    Fuel = gtk_entry_buffer_get_text(CreateVehicle_databuffer);
+    CreateVehicle_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_Tranmission_entry));
+    Transmission = gtk_entry_buffer_get_text(CreateVehicle_databuffer);
+    CreateVehicle_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_Seating_entry));
+    Seating = gtk_entry_buffer_get_text(CreateVehicle_databuffer);
+    sprintf (sql_db,"INSERT INTO Vehicles VALUES(%s,'%s','%s','%s','%s','%s','%s');",VehicleId,Brand,Model,Year,Fuel,Transmission,Seating);
+    sqlite3_exec(db, sql_db, 0, 0, &err_msg);
+}
 static void Admin_VehicleCreate_callback(GtkWidget *widget,gpointer data)
 {
     GtkWidget *Vehicles_window;
@@ -964,7 +985,7 @@ static void Admin_VehicleCreate_callback(GtkWidget *widget,gpointer data)
     gtk_box_append(VehiclesTableBox,Vehicle_Tranmission_entry);
     gtk_box_append(VehiclesTableBox,Vehicle_Seating_entry);
     gtk_box_append(VehiclesTableBox,Vehicles_Create_Button);
-    //g_signal_connect(Vehicles_Create_Button, "clicked", G_CALLBACK(Admin_VehicleCreateButton_callback), NULL);
+    g_signal_connect(Vehicles_Create_Button, "clicked", G_CALLBACK(Admin_VehicleCreateButton_callback), NULL);
     gtk_window_present(GTK_WINDOW(Vehicles_window));
 }
 static void Vehicles_table_callback(GtkWidget *widget,gpointer data)
