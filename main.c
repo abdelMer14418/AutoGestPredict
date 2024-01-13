@@ -75,6 +75,14 @@ GtkWidget *Rental_Vehicle_entry;
 
 GtkWidget *admin_deleteRental_entry;
 
+GtkWidget *Rental_RentalIdUpdate_entry;
+GtkWidget *Rental_UserIdUpdate_entry;
+GtkWidget *Rental_StartDateUpdate_entry;
+GtkWidget *Rental_EndDateUpdate_entry;
+GtkWidget *Rental_CostUpdate_entry;
+GtkWidget *Rental_StatusUpdate_entry;
+GtkWidget *Rental_VehicleUpdate_entry;
+
 
 
 sqlite3 *db;  // Declare a sqlite Database.
@@ -1014,6 +1022,66 @@ static void Admin_RentalDelete_callback(GtkWidget *widget, gpointer data)
     g_signal_connect(Remtal_Delete_Button, "clicked", G_CALLBACK(Admin_Rentals_Delete_Request_callback), NULL);
     gtk_window_present(GTK_WINDOW(Rentals_delete_window));
 }
+static void RentalUpdate_database_callback(GtkWidget *widget, gpointer data)
+{
+    GtkEntryBuffer *UpdateRentals_databuffer;
+    char *RentalId, *UserId, *StartDate, *EndDate, *Cost, *Status, *VehicleId;
+    UpdateRentals_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Rental_RentalIdUpdate_entry));
+    RentalId = gtk_entry_buffer_get_text(UpdateRentals_databuffer);
+    UpdateRentals_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Rental_UserIdUpdate_entry));
+    UserId = gtk_entry_buffer_get_text(UpdateRentals_databuffer);
+    UpdateRentals_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Rental_StartDateUpdate_entry));
+    StartDate = gtk_entry_buffer_get_text(UpdateRentals_databuffer);
+    UpdateRentals_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Rental_EndDateUpdate_entry));
+    EndDate = gtk_entry_buffer_get_text(UpdateRentals_databuffer);
+    UpdateRentals_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Rental_CostUpdate_entry));
+    Cost = gtk_entry_buffer_get_text(UpdateRentals_databuffer);
+    UpdateRentals_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Rental_StatusUpdate_entry));
+    Status = gtk_entry_buffer_get_text(UpdateRentals_databuffer);
+    UpdateRentals_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Rental_VehicleUpdate_entry));
+    VehicleId = gtk_entry_buffer_get_text(UpdateRentals_databuffer);
+    sprintf(sql_db, "UPDATE Rentals SET User_Id=%s,Start_date ='%s',"
+                    "End_date = '%s',"
+                    " Cost = %s,"
+                    " Rental_Status = '%s',Vehicle_Id = %s WHERE Rental_Id=%s",UserId,StartDate,EndDate,Cost,Status,VehicleId,RentalId);
+    sqlite3_exec(db, sql_db, 0, 0, &err_msg);
+    printf("%s",sql_db);
+}
+static void admin_RentalsUpdate_Callback(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *Updatewindow;
+    GtkWidget *Update_Button;
+    GtkBox *UpdateBox;
+    Updatewindow = gtk_window_new(); // Create login window.
+    gtk_window_set_title(GTK_WINDOW(Updatewindow), "Rental Update Page"); // Set the title of the window
+    UpdateBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0); // Create register box.
+    gtk_window_set_child(GTK_WINDOW(Updatewindow),UpdateBox);
+    Rental_RentalIdUpdate_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Rental_RentalIdUpdate_entry),"Rental Id");
+    Rental_UserIdUpdate_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Rental_UserIdUpdate_entry),"User Id");
+    Rental_StartDateUpdate_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Rental_StartDateUpdate_entry),"Start Date");
+    Rental_EndDateUpdate_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Rental_EndDateUpdate_entry),"End Date");
+    Rental_CostUpdate_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Rental_CostUpdate_entry),"Cost");
+    Rental_StatusUpdate_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Rental_StatusUpdate_entry),"Status");
+    Rental_VehicleUpdate_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Rental_VehicleUpdate_entry),"Vehicle Id");
+    Update_Button = gtk_button_new_with_label("Update");
+    gtk_box_append(UpdateBox,Rental_RentalIdUpdate_entry);
+    gtk_box_append(UpdateBox,Rental_UserIdUpdate_entry);
+    gtk_box_append(UpdateBox,Rental_StartDateUpdate_entry);
+    gtk_box_append(UpdateBox,Rental_EndDateUpdate_entry);
+    gtk_box_append(UpdateBox,Rental_CostUpdate_entry);
+    gtk_box_append(UpdateBox,Rental_StatusUpdate_entry);
+    gtk_box_append(UpdateBox,Rental_VehicleUpdate_entry);
+    gtk_box_append(UpdateBox,Update_Button);
+    g_signal_connect(Update_Button, "clicked", G_CALLBACK(RentalUpdate_database_callback), NULL);
+    gtk_window_present(GTK_WINDOW(Updatewindow));
+}
 static void Rentals_table_callback(GtkWidget *widget,gpointer data)
 {
     GtkWidget *Rentals_window;
@@ -1037,6 +1105,8 @@ static void Rentals_table_callback(GtkWidget *widget,gpointer data)
     gtk_box_append(RentalsTableBox,Rentals_Update_Button);
     g_signal_connect(Rentals_Create_Button, "clicked", G_CALLBACK(Admin_RentalCreate_callback), NULL);
     g_signal_connect(Rentals_Delete_Button, "clicked", G_CALLBACK(Admin_RentalDelete_callback), NULL);
+    g_signal_connect(Rentals_Update_Button, "clicked", G_CALLBACK(admin_RentalsUpdate_Callback), NULL);
+
 
 
     gtk_window_present(GTK_WINDOW(Rentals_window));
