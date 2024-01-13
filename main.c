@@ -694,6 +694,32 @@ static void admin_user_Read_entry(GtkWidget *widget,gpointer data)
     g_signal_connect(User_Read_Button, "clicked", G_CALLBACK(Admin_users_Read_Request_callback), NULL);
     gtk_window_present(GTK_WINDOW(users_Read_window));
 }
+static void Update_database_callback(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *UpdateStatuswindow;
+    GtkEntryBuffer *Update_databuffer;
+    char *firstname, *lastname, *password, *email, *phonenumber, *id;
+    GtkWidget *Updatedatalabel;
+    UpdateStatuswindow = gtk_window_new(); // Create login window.
+    Update_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Update_Id_entry));
+    id = gtk_entry_buffer_get_text(Update_databuffer);
+    Update_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Update_firstname_entry));
+    firstname = gtk_entry_buffer_get_text(Update_databuffer);
+    Update_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Update_lastname_entry));
+    lastname = gtk_entry_buffer_get_text(Update_databuffer);
+    Update_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Update_password_entry));
+    password = gtk_entry_buffer_get_text(Update_databuffer);
+    Update_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Update_email_entry));
+    email = gtk_entry_buffer_get_text(Update_databuffer);
+    Update_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Update_phonenumber_entry));
+    phonenumber = gtk_entry_buffer_get_text(Update_databuffer);
+    sprintf(sql_db, "UPDATE Clients SET Email='%s',First_Name ='%s',"
+                    "Last_Name = '%s',"
+                    " Phone_Number = '%s',"
+                    " Password = '%s' WHERE User_Id=%d",email,firstname,lastname,phonenumber,password,atoi(id));
+    sqlite3_exec(db, sql_db, 0, 0, &err_msg);
+    printf("%s",sql_db);
+}
 static void admin_user_Update_entry(GtkWidget *widget, gpointer data)
 {
     GtkWidget *Updatewindow;
@@ -724,7 +750,7 @@ static void admin_user_Update_entry(GtkWidget *widget, gpointer data)
     gtk_box_append(UpdateBox,Update_phonenumber_entry);
     gtk_box_append(UpdateBox,Update_password_entry);
     gtk_box_append(UpdateBox,Update_Button);
-    //g_signal_connect(Update_Button, "clicked", G_CALLBACK(Update_database_callback), NULL);
+    g_signal_connect(Update_Button, "clicked", G_CALLBACK(Update_database_callback), NULL);
     gtk_window_present(GTK_WINDOW(Updatewindow));
 }
 static void users_table_callback(GtkWidget *widget,gpointer data)
