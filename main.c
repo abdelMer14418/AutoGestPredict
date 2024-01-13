@@ -35,6 +35,13 @@ GtkListStore *Vehiclesstore;
 GtkListStore *store;
 GtkListStore *Readstore;
 
+GtkWidget *Update_Id_entry;
+GtkWidget *Update_firstname_entry;
+GtkWidget *Update_lastname_entry;
+GtkWidget *Update_password_entry;
+GtkWidget *Update_email_entry;
+GtkWidget *Update_phonenumber_entry;
+
 
 
 
@@ -687,7 +694,39 @@ static void admin_user_Read_entry(GtkWidget *widget,gpointer data)
     g_signal_connect(User_Read_Button, "clicked", G_CALLBACK(Admin_users_Read_Request_callback), NULL);
     gtk_window_present(GTK_WINDOW(users_Read_window));
 }
-
+static void admin_user_Update_entry(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *Updatewindow;
+    GtkWidget *Update_Button;
+    GtkBox *UpdateBox;
+    Updatewindow = gtk_window_new(); // Create login window.
+    gtk_window_set_title(GTK_WINDOW(Updatewindow), "Update Page"); // Set the title of the window
+    UpdateBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0); // Create register box.
+    gtk_window_set_child(GTK_WINDOW(Updatewindow),UpdateBox);
+    Update_Id_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Update_Id_entry),"User Id");
+    Update_firstname_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Update_firstname_entry),"First Name");
+    Update_lastname_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Update_lastname_entry),"Last Name");
+    Update_password_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Update_password_entry),"Password");
+    gtk_entry_set_visibility(GTK_ENTRY(Update_password_entry),FALSE);
+    Update_email_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Update_email_entry),"Email Address");
+    Update_phonenumber_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Update_phonenumber_entry),"Phone Number");
+    Update_Button = gtk_button_new_with_label("Update");
+    gtk_box_append(UpdateBox,Update_Id_entry);
+    gtk_box_append(UpdateBox,Update_firstname_entry);
+    gtk_box_append(UpdateBox,Update_lastname_entry);
+    gtk_box_append(UpdateBox,Update_email_entry);
+    gtk_box_append(UpdateBox,Update_phonenumber_entry);
+    gtk_box_append(UpdateBox,Update_password_entry);
+    gtk_box_append(UpdateBox,Update_Button);
+    //g_signal_connect(Update_Button, "clicked", G_CALLBACK(Update_database_callback), NULL);
+    gtk_window_present(GTK_WINDOW(Updatewindow));
+}
 static void users_table_callback(GtkWidget *widget,gpointer data)
 {
     GtkWidget *users_window;
@@ -711,7 +750,7 @@ static void users_table_callback(GtkWidget *widget,gpointer data)
     gtk_box_append(UsersTableBox,User_Update_Button);
     g_signal_connect(User_Create_Button, "clicked", G_CALLBACK(register_callback), NULL);
     g_signal_connect(User_Delete_Button, "clicked", G_CALLBACK(admin_user_Delete), NULL);
-    //g_signal_connect(User_Update_Button, "clicked", G_CALLBACK(admin_user_Update_entry), NULL);
+    g_signal_connect(User_Update_Button, "clicked", G_CALLBACK(admin_user_Update_entry), NULL);
     g_signal_connect(User_Read_Button, "clicked", G_CALLBACK(admin_user_Read_entry), NULL);
     gtk_window_present(GTK_WINDOW(users_window));
 }
