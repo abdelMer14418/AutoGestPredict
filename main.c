@@ -51,6 +51,7 @@ GtkWidget *Vehicle_Fuel_entry;
 GtkWidget *Vehicle_Tranmission_entry;
 GtkWidget *Vehicle_Seating_entry;
 
+GtkWidget *admin_deleteVehicle_entry;
 
 
 
@@ -988,6 +989,31 @@ static void Admin_VehicleCreate_callback(GtkWidget *widget,gpointer data)
     g_signal_connect(Vehicles_Create_Button, "clicked", G_CALLBACK(Admin_VehicleCreateButton_callback), NULL);
     gtk_window_present(GTK_WINDOW(Vehicles_window));
 }
+static void Admin_Vehicles_Delete_Request_callback(GtkWidget *widget, gpointer data)
+{
+    GtkEntryBuffer *deleted_Vehicleid_databuffer;
+    const char* deleted_id;
+    deleted_Vehicleid_databuffer = gtk_entry_get_buffer(GTK_ENTRY(admin_deleteVehicle_entry));
+    deleted_id = gtk_entry_buffer_get_text(deleted_Vehicleid_databuffer);
+    sprintf(sql_db,"DELETE from Vehicles where Vehicle_Id=%s",deleted_id);
+    sqlite3_exec(db, sql_db, 0, 0, &err_msg);
+}
+static void Admin_VehicleDelete_callback(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *Vehicles_delete_window;
+    GtkBox *VehiclesdeleteBox;
+    GtkWidget *Vehicle_Delete_Button;
+    Vehicles_delete_window = gtk_window_new();
+    VehiclesdeleteBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+    gtk_window_set_child(GTK_WINDOW(Vehicles_delete_window),VehiclesdeleteBox);
+    admin_deleteVehicle_entry = gtk_entry_new();
+    Vehicle_Delete_Button = gtk_button_new_with_label("Delete");
+    gtk_entry_set_placeholder_text(GTK_ENTRY(admin_deleteVehicle_entry),"Enter the ID");
+    gtk_box_append(VehiclesdeleteBox,admin_deleteVehicle_entry);
+    gtk_box_append(VehiclesdeleteBox,Vehicle_Delete_Button);
+    g_signal_connect(Vehicle_Delete_Button, "clicked", G_CALLBACK(Admin_Vehicles_Delete_Request_callback), NULL);
+    gtk_window_present(GTK_WINDOW(Vehicles_delete_window));
+}
 static void Vehicles_table_callback(GtkWidget *widget,gpointer data)
 {
     GtkWidget *Vehicles_window;
@@ -1010,6 +1036,8 @@ static void Vehicles_table_callback(GtkWidget *widget,gpointer data)
     gtk_box_append(VehiclesTableBox,Vehicles_Delete_Button);
     gtk_box_append(VehiclesTableBox,Vehicles_Update_Button);
     g_signal_connect(Vehicles_Create_Button, "clicked", G_CALLBACK(Admin_VehicleCreate_callback), NULL);
+    g_signal_connect(Vehicles_Delete_Button, "clicked", G_CALLBACK(Admin_VehicleDelete_callback), NULL);
+
 
     gtk_window_present(GTK_WINDOW(Vehicles_window));
 }
