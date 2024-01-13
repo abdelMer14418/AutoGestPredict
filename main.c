@@ -465,6 +465,73 @@ static void Admin_RentalHistory_callback(GtkWidget *widget, gpointer data)
 
     gtk_window_present(GTK_WINDOW(AdminRentalHistory_window));  // to show the window.
 }
+static void register_database_callback(GtkWidget *widget,gpointer data) {
+    GtkWidget *RegisterStatuswindow;
+    GtkEntryBuffer *register_databuffer;
+    char *firstname, *lastname, *password, *email, *phonenumber;
+    GtkWidget *datalabel;
+    RegisterStatuswindow = gtk_window_new(); // Create login window.
+    register_databuffer = gtk_entry_get_buffer(GTK_ENTRY(register_firstname_entry));
+    firstname = gtk_entry_buffer_get_text(register_databuffer);
+    register_databuffer = gtk_entry_get_buffer(GTK_ENTRY(register_lastname_entry));
+    lastname = gtk_entry_buffer_get_text(register_databuffer);
+    register_databuffer = gtk_entry_get_buffer(GTK_ENTRY(register_password_entry));
+    password = gtk_entry_buffer_get_text(register_databuffer);
+    caesar_chiper_encrypt(password);
+    register_databuffer = gtk_entry_get_buffer(GTK_ENTRY(register_email_entry));
+    email = gtk_entry_buffer_get_text(register_databuffer);
+    register_databuffer = gtk_entry_get_buffer(GTK_ENTRY(register_phonenumber_entry));
+    phonenumber = gtk_entry_buffer_get_text(register_databuffer);
+    isemailfound = -1;
+    sprintf(sql_db, "SELECT Email from Clients");
+    sqlite3_exec(db, sql_db, client_CheckMail_callback, email, &err_msg);
+    if (isemailfound == 0)
+    {
+        datalabel = gtk_label_new("Email is already used");
+    }
+    else
+    {
+        sprintf(sql_db,"SELECT User_Id from Clients");
+        sqlite3_exec(db,sql_db,client_GetLastId_callback,0,&err_msg);
+        userid = userid + 1;
+        sprintf (sql_db,"INSERT INTO Clients VALUES(%lld,'%s','%s','%s','%s','%s');",userid,lastname,firstname,email,phonenumber,password);
+        sqlite3_exec(db, sql_db, 0, 0, &err_msg);
+        datalabel = gtk_label_new("Created Successfully!");
+    }
+    gtk_window_set_child(RegisterStatuswindow,datalabel);
+    gtk_window_present(GTK_WINDOW(RegisterStatuswindow));
+}
+
+static void register_callback(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *registerwindow;
+    GtkWidget *register_Button;
+    GtkBox *registerBox;
+    registerwindow = gtk_window_new(); // Create login window.
+    gtk_window_set_title(GTK_WINDOW(registerwindow), "Register Page"); // Set the title of the window
+    registerBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0); // Create register box.
+    gtk_window_set_child(GTK_WINDOW(registerwindow),registerBox);
+    register_firstname_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(register_firstname_entry),"First Name");
+    register_lastname_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(register_lastname_entry),"Last Name");
+    register_password_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(register_password_entry),"Password");
+    gtk_entry_set_visibility(GTK_ENTRY(register_password_entry),FALSE);
+    register_email_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(register_email_entry),"Email Address");
+    register_phonenumber_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(register_phonenumber_entry),"Phone Number");
+    register_Button = gtk_button_new_with_label("Sign Up");
+    gtk_box_append(registerBox,register_firstname_entry);
+    gtk_box_append(registerBox,register_lastname_entry);
+    gtk_box_append(registerBox,register_email_entry);
+    gtk_box_append(registerBox,register_phonenumber_entry);
+    gtk_box_append(registerBox,register_password_entry);
+    gtk_box_append(registerBox,register_Button);
+    g_signal_connect(register_Button, "clicked", G_CALLBACK(register_database_callback), NULL);
+    gtk_window_present(GTK_WINDOW(registerwindow));
+}
 
 static void users_table_callback(GtkWidget *widget,gpointer data)
 {
@@ -487,7 +554,7 @@ static void users_table_callback(GtkWidget *widget,gpointer data)
     gtk_box_append(UsersTableBox,User_Read_Button);
     gtk_box_append(UsersTableBox,User_Delete_Button);
     gtk_box_append(UsersTableBox,User_Update_Button);
-    //g_signal_connect(User_Create_Button, "clicked", G_CALLBACK(register_callback), NULL);
+    g_signal_connect(User_Create_Button, "clicked", G_CALLBACK(register_callback), NULL);
     //g_signal_connect(User_Delete_Button, "clicked", G_CALLBACK(admin_user_Delete), NULL);
     //g_signal_connect(User_Update_Button, "clicked", G_CALLBACK(admin_user_Update_entry), NULL);
     //g_signal_connect(User_Read_Button, "clicked", G_CALLBACK(admin_user_Read_entry), NULL);
@@ -665,42 +732,7 @@ static void login_database_callback(GtkWidget *widget,gpointer data)
     gtk_window_present(GTK_WINDOW(LoginStatuswindow));
 }
 
-static void register_database_callback(GtkWidget *widget,gpointer data) {
-    GtkWidget *RegisterStatuswindow;
-    GtkEntryBuffer *register_databuffer;
-    char *firstname, *lastname, *password, *email, *phonenumber;
-    GtkWidget *datalabel;
-    RegisterStatuswindow = gtk_window_new(); // Create login window.
-    register_databuffer = gtk_entry_get_buffer(GTK_ENTRY(register_firstname_entry));
-    firstname = gtk_entry_buffer_get_text(register_databuffer);
-    register_databuffer = gtk_entry_get_buffer(GTK_ENTRY(register_lastname_entry));
-    lastname = gtk_entry_buffer_get_text(register_databuffer);
-    register_databuffer = gtk_entry_get_buffer(GTK_ENTRY(register_password_entry));
-    password = gtk_entry_buffer_get_text(register_databuffer);
-    caesar_chiper_encrypt(password);
-    register_databuffer = gtk_entry_get_buffer(GTK_ENTRY(register_email_entry));
-    email = gtk_entry_buffer_get_text(register_databuffer);
-    register_databuffer = gtk_entry_get_buffer(GTK_ENTRY(register_phonenumber_entry));
-    phonenumber = gtk_entry_buffer_get_text(register_databuffer);
-    isemailfound = -1;
-    sprintf(sql_db, "SELECT Email from Clients");
-    sqlite3_exec(db, sql_db, client_CheckMail_callback, email, &err_msg);
-    if (isemailfound == 0)
-    {
-        datalabel = gtk_label_new("Email is already used");
-    }
-    else
-    {
-        sprintf(sql_db,"SELECT User_Id from Clients");
-        sqlite3_exec(db,sql_db,client_GetLastId_callback,0,&err_msg);
-        userid = userid + 1;
-        sprintf (sql_db,"INSERT INTO Clients VALUES(%lld,'%s','%s','%s','%s','%s');",userid,lastname,firstname,email,phonenumber,password);
-        sqlite3_exec(db, sql_db, 0, 0, &err_msg);
-        datalabel = gtk_label_new("Created Successfully!");
-    }
-    gtk_window_set_child(RegisterStatuswindow,datalabel);
-    gtk_window_present(GTK_WINDOW(RegisterStatuswindow));
-}
+
 
 static void Login_callback(GtkWidget *widget, gpointer data)
 {
@@ -725,36 +757,7 @@ static void Login_callback(GtkWidget *widget, gpointer data)
     gtk_window_present(GTK_WINDOW(loginwindow));
 }
 
-static void register_callback(GtkWidget *widget, gpointer data)
-{
-    GtkWidget *registerwindow;
-    GtkWidget *register_Button;
-    GtkBox *registerBox;
-    registerwindow = gtk_window_new(); // Create login window.
-    gtk_window_set_title(GTK_WINDOW(registerwindow), "Register Page"); // Set the title of the window
-    registerBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0); // Create register box.
-    gtk_window_set_child(GTK_WINDOW(registerwindow),registerBox);
-    register_firstname_entry = gtk_entry_new();
-    gtk_entry_set_placeholder_text(GTK_ENTRY(register_firstname_entry),"First Name");
-    register_lastname_entry = gtk_entry_new();
-    gtk_entry_set_placeholder_text(GTK_ENTRY(register_lastname_entry),"Last Name");
-    register_password_entry = gtk_entry_new();
-    gtk_entry_set_placeholder_text(GTK_ENTRY(register_password_entry),"Password");
-    gtk_entry_set_visibility(GTK_ENTRY(register_password_entry),FALSE);
-    register_email_entry = gtk_entry_new();
-    gtk_entry_set_placeholder_text(GTK_ENTRY(register_email_entry),"Email Address");
-    register_phonenumber_entry = gtk_entry_new();
-    gtk_entry_set_placeholder_text(GTK_ENTRY(register_phonenumber_entry),"Phone Number");
-    register_Button = gtk_button_new_with_label("Sign Up");
-    gtk_box_append(registerBox,register_firstname_entry);
-    gtk_box_append(registerBox,register_lastname_entry);
-    gtk_box_append(registerBox,register_email_entry);
-    gtk_box_append(registerBox,register_phonenumber_entry);
-    gtk_box_append(registerBox,register_password_entry);
-    gtk_box_append(registerBox,register_Button);
-    g_signal_connect(register_Button, "clicked", G_CALLBACK(register_database_callback), NULL);
-    gtk_window_present(GTK_WINDOW(registerwindow));
-}
+
 
 
 static void User_callback(GtkWidget *widget, gpointer data)
