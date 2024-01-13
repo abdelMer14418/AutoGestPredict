@@ -43,6 +43,14 @@ GtkWidget *Update_password_entry;
 GtkWidget *Update_email_entry;
 GtkWidget *Update_phonenumber_entry;
 
+GtkWidget *Vehicle_VehicleId_entry;
+GtkWidget *Vehicle_Brand_entry;
+GtkWidget *Vehicle_Model_entry;
+GtkWidget *Vehicle_Year_entry;
+GtkWidget *Vehicle_Fuel_entry;
+GtkWidget *Vehicle_Tranmission_entry;
+GtkWidget *Vehicle_Seating_entry;
+
 
 
 
@@ -925,6 +933,40 @@ static void Rentals_table_callback(GtkWidget *widget,gpointer data)
     gtk_box_append(RentalsTableBox,Rentals_Update_Button);
     gtk_window_present(GTK_WINDOW(Rentals_window));
 }
+static void Admin_VehicleCreate_callback(GtkWidget *widget,gpointer data)
+{
+    GtkWidget *Vehicles_window;
+    GtkBox *VehiclesTableBox;
+    GtkWidget *Vehicles_Create_Button;
+    Vehicles_window = gtk_window_new();
+    VehiclesTableBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+    gtk_window_set_child(GTK_WINDOW(Vehicles_window),VehiclesTableBox);
+    Vehicle_VehicleId_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_VehicleId_entry),"Vehicle Id");
+    Vehicle_Brand_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_Brand_entry),"Brand");
+    Vehicle_Model_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_Model_entry),"Model");
+    Vehicle_Year_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_Year_entry),"Year");
+    Vehicle_Fuel_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_Fuel_entry),"Fuel");
+    Vehicle_Tranmission_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_Tranmission_entry),"Transmission");
+    Vehicle_Seating_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_Seating_entry),"Seating Capacity");
+    Vehicles_Create_Button = gtk_button_new_with_label("Create");
+    gtk_box_append(VehiclesTableBox,Vehicle_VehicleId_entry);
+    gtk_box_append(VehiclesTableBox,Vehicle_Brand_entry);
+    gtk_box_append(VehiclesTableBox,Vehicle_Model_entry);
+    gtk_box_append(VehiclesTableBox,Vehicle_Year_entry);
+    gtk_box_append(VehiclesTableBox,Vehicle_Fuel_entry);
+    gtk_box_append(VehiclesTableBox,Vehicle_Tranmission_entry);
+    gtk_box_append(VehiclesTableBox,Vehicle_Seating_entry);
+    gtk_box_append(VehiclesTableBox,Vehicles_Create_Button);
+    //g_signal_connect(Vehicles_Create_Button, "clicked", G_CALLBACK(Admin_VehicleCreateButton_callback), NULL);
+    gtk_window_present(GTK_WINDOW(Vehicles_window));
+}
 static void Vehicles_table_callback(GtkWidget *widget,gpointer data)
 {
     GtkWidget *Vehicles_window;
@@ -946,6 +988,8 @@ static void Vehicles_table_callback(GtkWidget *widget,gpointer data)
     gtk_box_append(VehiclesTableBox,Vehicles_Read_Button);
     gtk_box_append(VehiclesTableBox,Vehicles_Delete_Button);
     gtk_box_append(VehiclesTableBox,Vehicles_Update_Button);
+    g_signal_connect(Vehicles_Create_Button, "clicked", G_CALLBACK(Admin_VehicleCreate_callback), NULL);
+
     gtk_window_present(GTK_WINDOW(Vehicles_window));
 }
 static void Admin_tableselection_callback(GtkWidget *widget,gpointer data)
