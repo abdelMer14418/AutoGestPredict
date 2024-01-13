@@ -35,6 +35,8 @@ GtkListStore *Vehiclesstore;
 GtkListStore *store;
 GtkListStore *Readstore;
 GtkListStore *RentalHistory;
+GtkListStore *ReadVehiclesstore;
+
 
 GtkWidget *Update_Id_entry;
 GtkWidget *Update_firstname_entry;
@@ -52,6 +54,9 @@ GtkWidget *Vehicle_Tranmission_entry;
 GtkWidget *Vehicle_Seating_entry;
 
 GtkWidget *admin_deleteVehicle_entry;
+
+GtkWidget *admin_VehicleRead_entry;
+
 
 
 
@@ -1014,6 +1019,148 @@ static void Admin_VehicleDelete_callback(GtkWidget *widget, gpointer data)
     g_signal_connect(Vehicle_Delete_Button, "clicked", G_CALLBACK(Admin_Vehicles_Delete_Request_callback), NULL);
     gtk_window_present(GTK_WINDOW(Vehicles_delete_window));
 }
+
+static int Vehicles_client_Read_callback (void *data, int argc, char **argv,char **azColName)
+{
+    GtkTreeIter iter;
+    gtk_list_store_append (ReadVehiclesstore, &iter);
+    gtk_list_store_set (ReadVehiclesstore, &iter,
+                        COL_Vehicle_Id, atoi(argv[0]),
+                        COL_Brand, argv[1],
+                        COL_Model, argv[2],
+                        COL_Year, argv[3],
+                        COL_Fuel,argv[4],
+                        COL_Transmission,argv[5],
+                        COL_Seating,argv[6],
+                        -1);
+    return 0;
+}
+static GtkTreeModel *
+ReadVehicle_and_fill_model (char *data)
+{
+    ReadVehiclesstore = gtk_list_store_new (NUM_Vehicle_COLS,
+                                            G_TYPE_UINT,
+                                            G_TYPE_STRING,
+                                            G_TYPE_STRING,
+                                            G_TYPE_STRING,
+                                            G_TYPE_STRING,
+                                            G_TYPE_STRING,
+                                            G_TYPE_STRING);
+    sprintf(sql_db, "SELECT * from Vehicles WHERE Vehicle_Id = %s",data);
+    sqlite3_exec(db, sql_db, Vehicles_client_Read_callback, 0, &err_msg);
+    /* Append a row and fill in some data */
+    return GTK_TREE_MODEL (ReadVehiclesstore);
+}
+
+
+static GtkWidget *
+Readvehicle_view_and_model (char *data)
+{
+    GtkWidget *view = gtk_tree_view_new ();
+
+    GtkCellRenderer *renderer;
+
+    /* --- Column #2 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Vehicle Id",
+                                                 renderer,
+                                                 "text", COL_Vehicle_Id,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Brand",
+                                                 renderer,
+                                                 "text", COL_Brand,
+                                                 NULL);
+
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Model",
+                                                 renderer,
+                                                 "text", COL_Model,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Year",
+                                                 renderer,
+                                                 "text", COL_Year,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Fuel",
+                                                 renderer,
+                                                 "text", COL_Fuel,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Transmission",
+                                                 renderer,
+                                                 "text", COL_Transmission,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Seating Capacity",
+                                                 renderer,
+                                                 "text", COL_Seating,
+                                                 NULL);
+    GtkTreeModel *model = ReadVehicle_and_fill_model (data);
+
+    gtk_tree_view_set_model (GTK_TREE_VIEW (view), model);
+
+    /* The tree view has acquired its own reference to the
+     *  model, so we can drop ours. That way the model will
+     *  be freed automatically when the tree view is destroyed
+     */
+    g_object_unref (model);
+
+    return view;
+}
+
+static void Admin_Vehicles_Read_Request_callback(GtkWidget *widget,gpointer data)
+{
+    GtkWidget *Vehicles_window;
+    GtkBox *VehiclesTableBox;
+    GtkEntryBuffer *Read_databuffer;
+    Vehicles_window = gtk_window_new();
+    char* id;
+    VehiclesTableBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+    Read_databuffer = gtk_entry_get_buffer(GTK_ENTRY(admin_VehicleRead_entry));
+    id = gtk_entry_buffer_get_text(Read_databuffer);
+    GtkWidget *view = Readvehicle_view_and_model(id);
+    gtk_window_set_child(GTK_WINDOW(Vehicles_window),VehiclesTableBox);
+    gtk_box_append(VehiclesTableBox,view);
+    gtk_window_present(GTK_WINDOW(Vehicles_window));
+}
+static void admin_VehiclesRead_Callback(GtkWidget *widget,gpointer data)
+{
+    GtkWidget *Vehicles_Read_window;
+    GtkBox *VehiclesReadBox;
+    GtkWidget *Vehicles_Read_Button;
+    Vehicles_Read_window = gtk_window_new();
+    VehiclesReadBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+    gtk_window_set_child(GTK_WINDOW(Vehicles_Read_window),VehiclesReadBox);
+    admin_VehicleRead_entry = gtk_entry_new();
+    Vehicles_Read_Button = gtk_button_new_with_label("Read");
+    gtk_entry_set_placeholder_text(GTK_ENTRY(admin_VehicleRead_entry),"Enter the Vehicle Id");
+    gtk_box_append(VehiclesReadBox,admin_VehicleRead_entry);
+    gtk_box_append(VehiclesReadBox,Vehicles_Read_Button);
+    g_signal_connect(Vehicles_Read_Button, "clicked", G_CALLBACK(Admin_Vehicles_Read_Request_callback), NULL);
+    gtk_window_present(GTK_WINDOW(Vehicles_Read_window));
+}
 static void Vehicles_table_callback(GtkWidget *widget,gpointer data)
 {
     GtkWidget *Vehicles_window;
@@ -1037,6 +1184,9 @@ static void Vehicles_table_callback(GtkWidget *widget,gpointer data)
     gtk_box_append(VehiclesTableBox,Vehicles_Update_Button);
     g_signal_connect(Vehicles_Create_Button, "clicked", G_CALLBACK(Admin_VehicleCreate_callback), NULL);
     g_signal_connect(Vehicles_Delete_Button, "clicked", G_CALLBACK(Admin_VehicleDelete_callback), NULL);
+    g_signal_connect(Vehicles_Read_Button, "clicked", G_CALLBACK(admin_VehiclesRead_Callback), NULL);
+
+
 
 
     gtk_window_present(GTK_WINDOW(Vehicles_window));
