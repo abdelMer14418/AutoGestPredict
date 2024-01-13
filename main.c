@@ -30,6 +30,14 @@ GtkWidget * Vehicle_PredictionContinent_entry;
 GtkWidget *admin_deleteId_entry;
 GtkWidget *admin_Readuser_entry;
 
+GtkWidget *Vehicle_VehicleIdUpdate_entry;
+GtkWidget *Vehicle_BrandUpdate_entry;
+GtkWidget *Vehicle_ModelUpdate_entry;
+GtkWidget *Vehicle_YearUpdate_entry;
+GtkWidget *Vehicle_FuelUpdate_entry;
+GtkWidget *Vehicle_TranmissionUpdate_entry;
+GtkWidget *Vehicle_SeatingUpdate_entry;
+
 
 GtkListStore *Vehiclesstore;
 GtkListStore *store;
@@ -1161,6 +1169,66 @@ static void admin_VehiclesRead_Callback(GtkWidget *widget,gpointer data)
     g_signal_connect(Vehicles_Read_Button, "clicked", G_CALLBACK(Admin_Vehicles_Read_Request_callback), NULL);
     gtk_window_present(GTK_WINDOW(Vehicles_Read_window));
 }
+static void Admin_VehicleUpdateButton_callback(GtkWidget *widget, gpointer data)
+{
+    GtkEntryBuffer *CreateVehicle_databuffer;
+    char *VehicleId, *Brand, *Model, *Year, *Fuel, *Transmission, *Seating;
+    CreateVehicle_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_VehicleIdUpdate_entry));
+    VehicleId = gtk_entry_buffer_get_text(CreateVehicle_databuffer);
+    CreateVehicle_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_BrandUpdate_entry));
+    Brand = gtk_entry_buffer_get_text(CreateVehicle_databuffer);
+    CreateVehicle_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_ModelUpdate_entry));
+    Model = gtk_entry_buffer_get_text(CreateVehicle_databuffer);
+    CreateVehicle_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_YearUpdate_entry));
+    Year = gtk_entry_buffer_get_text(CreateVehicle_databuffer);
+    CreateVehicle_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_FuelUpdate_entry));
+    Fuel = gtk_entry_buffer_get_text(CreateVehicle_databuffer);
+    CreateVehicle_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_TranmissionUpdate_entry));
+    Transmission = gtk_entry_buffer_get_text(CreateVehicle_databuffer);
+    CreateVehicle_databuffer = gtk_entry_get_buffer(GTK_ENTRY(Vehicle_SeatingUpdate_entry));
+    Seating = gtk_entry_buffer_get_text(CreateVehicle_databuffer);
+    sprintf(sql_db, "UPDATE Vehicles SET Brand='%s',Model ='%s',"
+                    "Year = '%s',"
+                    " Fuel_type = '%s',"
+                    " Transmission = '%s',"
+                    "Seating_Capacity = '%s'"
+                    " WHERE Vehicle_Id=%s",Brand,Model,Year,Fuel,Transmission,Seating,VehicleId);
+    sqlite3_exec(db, sql_db, 0, 0, &err_msg);
+}
+static void admin_VehiclesUpdate_Callback(GtkWidget *widget, gpointer data)
+{
+    GtkWidget *Vehicles_window;
+    GtkBox *VehiclesTableBox;
+    GtkWidget *Vehicles_Update_Button;
+    Vehicles_window = gtk_window_new();
+    VehiclesTableBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+    gtk_window_set_child(GTK_WINDOW(Vehicles_window),VehiclesTableBox);
+    Vehicle_VehicleIdUpdate_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_VehicleIdUpdate_entry),"Vehicle Id");
+    Vehicle_BrandUpdate_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_BrandUpdate_entry),"Brand");
+    Vehicle_ModelUpdate_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_ModelUpdate_entry),"Model");
+    Vehicle_YearUpdate_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_YearUpdate_entry),"Year");
+    Vehicle_FuelUpdate_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_FuelUpdate_entry),"Fuel");
+    Vehicle_TranmissionUpdate_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_TranmissionUpdate_entry),"Transmission");
+    Vehicle_SeatingUpdate_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Vehicle_SeatingUpdate_entry),"Seating Capacity");
+    Vehicles_Update_Button = gtk_button_new_with_label("Update");
+    gtk_box_append(VehiclesTableBox,Vehicle_VehicleIdUpdate_entry);
+    gtk_box_append(VehiclesTableBox,Vehicle_BrandUpdate_entry);
+    gtk_box_append(VehiclesTableBox,Vehicle_ModelUpdate_entry);
+    gtk_box_append(VehiclesTableBox,Vehicle_YearUpdate_entry);
+    gtk_box_append(VehiclesTableBox,Vehicle_FuelUpdate_entry);
+    gtk_box_append(VehiclesTableBox,Vehicle_TranmissionUpdate_entry);
+    gtk_box_append(VehiclesTableBox,Vehicle_SeatingUpdate_entry);
+    gtk_box_append(VehiclesTableBox,Vehicles_Update_Button);
+    g_signal_connect(Vehicles_Update_Button, "clicked", G_CALLBACK(Admin_VehicleUpdateButton_callback), NULL);
+    gtk_window_present(GTK_WINDOW(Vehicles_window));
+}
 static void Vehicles_table_callback(GtkWidget *widget,gpointer data)
 {
     GtkWidget *Vehicles_window;
@@ -1185,6 +1253,8 @@ static void Vehicles_table_callback(GtkWidget *widget,gpointer data)
     g_signal_connect(Vehicles_Create_Button, "clicked", G_CALLBACK(Admin_VehicleCreate_callback), NULL);
     g_signal_connect(Vehicles_Delete_Button, "clicked", G_CALLBACK(Admin_VehicleDelete_callback), NULL);
     g_signal_connect(Vehicles_Read_Button, "clicked", G_CALLBACK(admin_VehiclesRead_Callback), NULL);
+    g_signal_connect(Vehicles_Update_Button, "clicked", G_CALLBACK(admin_VehiclesUpdate_Callback), NULL);
+
 
 
 
