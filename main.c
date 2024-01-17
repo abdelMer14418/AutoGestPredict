@@ -1676,6 +1676,24 @@ CreatevehicleRentals_view_and_model (char* data)
 
     return view;
 }
+static void Rental_Create_callback(GtkWidget *widget,gpointer data)
+{
+    GtkEntryBuffer *databuffer;
+    char* rental_startdate;
+    char* rental_enddate;
+    char* rental_statue = "Rented";
+    databuffer = gtk_entry_get_buffer(Rental_Startdate_entry);
+    rental_startdate = gtk_entry_buffer_get_text(databuffer);
+    databuffer = gtk_entry_get_buffer(Rental_Enddate_entry);
+    rental_enddate = gtk_entry_buffer_get_text(databuffer);
+    Rentalid = Rentalid + 1;
+    printf("%s",rental_startdate);
+    printf("%s",rental_enddate);
+    printf("%s",(char*)data);
+    sprintf (sql_db,"INSERT INTO Rentals VALUES(%lld,%d,'%s','%s',%d,'%s',%s);",Rentalid,current_user_id,rental_startdate,rental_enddate,1000,rental_statue,(char*)data);
+    sqlite3_exec(db,sql_db,0,0,&err_msg);
+    printf("%s",sql_db);
+}
 
 static void Vehicle_Selection_callback(GtkWidget *widget,gpointer data)
 {
@@ -1698,6 +1716,7 @@ static void Vehicle_Selection_callback(GtkWidget *widget,gpointer data)
     gtk_box_append(VehicleCalendarBox,Rental_Startdate_entry);
     gtk_box_append(VehicleCalendarBox,Rental_Enddate_entry);
     gtk_box_append(VehicleCalendarBox,Rental_Button_proceed);
+    g_signal_connect(Rental_Button_proceed, "clicked", G_CALLBACK(Rental_Create_callback), vehicle_id);
     gtk_window_present(GTK_WINDOW(vehicleCalendar_window));
 }
 static void VehicleSelection_database_callback(GtkWidget *widget,gpointer data)
