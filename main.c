@@ -38,6 +38,9 @@ GtkWidget *Vehicle_FuelUpdate_entry;
 GtkWidget *Vehicle_TranmissionUpdate_entry;
 GtkWidget *Vehicle_SeatingUpdate_entry;
 
+GtkWidget *vehicle_Id_entry;
+
+
 
 GtkListStore *Vehiclesstore;
 GtkListStore *store;
@@ -1594,6 +1597,22 @@ static void Admin_tableselection_callback(GtkWidget *widget,gpointer data)
     g_signal_connect(Vehicles_Button, "clicked", G_CALLBACK(Vehicles_table_callback), NULL);
     gtk_window_present(GTK_WINDOW(TablesWindow));
 }
+static void VehicleSelection_database_callback(GtkWidget *widget,gpointer data)
+{
+    GtkWidget *vehicleSelection_window;
+    GtkWidget *Vehicles_Button_Selection_Id;
+    GtkBox *VehiclesSelectionBox;
+    vehicleSelection_window = gtk_window_new();
+    gtk_window_set_title(GTK_WINDOW(vehicleSelection_window), "Select Vehicle"); // Set the title of the window
+    VehiclesSelectionBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+    gtk_window_set_child(GTK_WINDOW(vehicleSelection_window),VehiclesSelectionBox);
+    vehicle_Id_entry = gtk_entry_new();
+    Vehicles_Button_Selection_Id = gtk_button_new_with_label("Ok");
+    gtk_entry_set_placeholder_text(GTK_ENTRY(vehicle_Id_entry),"Vehicle Id");
+    gtk_box_append(VehiclesSelectionBox,vehicle_Id_entry);
+    gtk_box_append(VehiclesSelectionBox,Vehicles_Button_Selection_Id);
+    gtk_window_present(GTK_WINDOW(vehicleSelection_window));
+}
 
 static void Vehicle_database_callback(GtkWidget *widget,gpointer data)
 {
@@ -1607,7 +1626,7 @@ static void Vehicle_database_callback(GtkWidget *widget,gpointer data)
     Vehicles_Button_Selection = gtk_button_new_with_label("Available Vehicles");
     gtk_box_append(VehiclesBox,Vehiclesview);
     gtk_box_append(VehiclesBox,Vehicles_Button_Selection);
-    //g_signal_connect(Vehicles_Button_Selection, "clicked", G_CALLBACK(VehicleSelection_database_callback), NULL);
+    g_signal_connect(Vehicles_Button_Selection, "clicked", G_CALLBACK(VehicleSelection_database_callback), NULL);
     gtk_window_present(GTK_WINDOW(vehicless_window));
 }
 
