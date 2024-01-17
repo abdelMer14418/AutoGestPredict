@@ -48,6 +48,7 @@ GtkListStore *Readstore;
 GtkListStore *RentalHistory;
 GtkListStore *ReadVehiclesstore;
 GtkListStore *RentalRead;
+GtkListStore *VehicleRentals;
 
 
 
@@ -90,7 +91,8 @@ GtkWidget *Rental_VehicleUpdate_entry;
 
 GtkWidget *admin_ReadRental_entry;
 
-
+GtkWidget *Rental_Startdate_entry;
+GtkWidget *Rental_Enddate_entry;
 
 
 sqlite3 *db;  // Declare a sqlite Database.
@@ -140,6 +142,14 @@ enum
     COL_RentalHistory_Status,
     COL_RentalHistory_VehicleId,
     NUM_RentalHistory_COLS
+} ;
+
+enum
+{
+    COL_Rental_StartDate = 0,
+    COL_Rental_EndData,
+    COL_Rental_Status,
+    NUM_Rental_COLS
 } ;
 
 void caesar_chiper_encrypt(char* data)
@@ -1597,6 +1607,99 @@ static void Admin_tableselection_callback(GtkWidget *widget,gpointer data)
     g_signal_connect(Vehicles_Button, "clicked", G_CALLBACK(Vehicles_table_callback), NULL);
     gtk_window_present(GTK_WINDOW(TablesWindow));
 }
+
+static int Vehicles_Rentals_retrieve_callback (void *data, int argc, char **argv,char **azColName)
+{
+    GtkTreeIter iter;
+    gtk_list_store_append (VehicleRentals, &iter);
+    gtk_list_store_set (VehicleRentals, &iter,
+                        COL_Rental_StartDate, argv[2],
+                        COL_Rental_EndData, argv[3],
+                        COL_Rental_Status, argv[5],
+                        -1);
+    return 0;
+}
+static GtkTreeModel *
+createVehicleRentals_and_fill_model (char* data)
+{
+    VehicleRentals = gtk_list_store_new (NUM_Rental_COLS,
+                                         G_TYPE_STRING,
+                                         G_TYPE_STRING,
+                                         G_TYPE_STRING);
+    sprintf(sql_db,"SELECT * FROM Rentals where Vehicle_Id=%s",data);
+    printf("%s",sql_db);
+    sqlite3_exec(db, sql_db, Vehicles_Rentals_retrieve_callback, 0, &err_msg);
+    /* Append a row and fill in some data */
+    return GTK_TREE_MODEL (VehicleRentals);
+}
+static GtkWidget *
+CreatevehicleRentals_view_and_model (char* data)
+{
+    GtkWidget *view = gtk_tree_view_new ();
+
+    GtkCellRenderer *renderer;
+
+    /* --- Column #2 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Rental Start Date",
+                                                 renderer,
+                                                 "text", COL_Rental_StartDate,
+                                                 NULL);
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Rental End Data",
+                                                 renderer,
+                                                 "text", COL_Rental_EndData,
+                                                 NULL);
+
+    /* --- Column #1 --- */
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                                 -1,
+                                                 "Rental Status",
+                                                 renderer,
+                                                 "text", COL_Rental_Status,
+                                                 NULL);
+    GtkTreeModel *model = createVehicleRentals_and_fill_model (data);
+
+    gtk_tree_view_set_model (GTK_TREE_VIEW (view), model);
+
+    /* The tree view has acquired its own reference to the
+     *  model, so we can drop ours. That way the model will
+     *  be freed automatically when the tree view is destroyed
+     */
+    g_object_unref (model);
+
+    return view;
+}
+
+static void Vehicle_Selection_callback(GtkWidget *widget,gpointer data)
+{
+    GtkEntryBuffer *databuffer;
+    GtkWidget *vehicleCalendar_window;
+    GtkBox *VehicleCalendarBox;
+    GtkWidget *Rental_Button_proceed = gtk_button_new_with_label("Proceed");
+    char* vehicle_id;
+    vehicleCalendar_window = gtk_window_new();
+    VehicleCalendarBox = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+    gtk_window_set_child(GTK_WINDOW(vehicleCalendar_window),VehicleCalendarBox);
+    databuffer = gtk_entry_get_buffer(vehicle_Id_entry);
+    vehicle_id = gtk_entry_buffer_get_text(databuffer);
+    Rental_Enddate_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Rental_Enddate_entry),"Start Date in dd.mm.yyyy");
+    Rental_Startdate_entry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Rental_Startdate_entry),"End Date in dd.mm.yyyy");
+    GtkWidget *Vehiclesview = CreatevehicleRentals_view_and_model(vehicle_id);
+    gtk_box_append(VehicleCalendarBox,Vehiclesview);
+    gtk_box_append(VehicleCalendarBox,Rental_Startdate_entry);
+    gtk_box_append(VehicleCalendarBox,Rental_Enddate_entry);
+    gtk_box_append(VehicleCalendarBox,Rental_Button_proceed);
+    gtk_window_present(GTK_WINDOW(vehicleCalendar_window));
+}
 static void VehicleSelection_database_callback(GtkWidget *widget,gpointer data)
 {
     GtkWidget *vehicleSelection_window;
@@ -1611,6 +1714,7 @@ static void VehicleSelection_database_callback(GtkWidget *widget,gpointer data)
     gtk_entry_set_placeholder_text(GTK_ENTRY(vehicle_Id_entry),"Vehicle Id");
     gtk_box_append(VehiclesSelectionBox,vehicle_Id_entry);
     gtk_box_append(VehiclesSelectionBox,Vehicles_Button_Selection_Id);
+    g_signal_connect(Vehicles_Button_Selection_Id, "clicked", G_CALLBACK(Vehicle_Selection_callback), NULL);
     gtk_window_present(GTK_WINDOW(vehicleSelection_window));
 }
 
