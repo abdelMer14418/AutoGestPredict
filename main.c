@@ -1,5 +1,6 @@
 //
 // Created by abdelhak on 06/01/2024.
+// Description : Car management application. It offers features for price prediction, reservation management, and customer management.
 //
 
 
@@ -1696,20 +1697,14 @@ static void Rental_Create_callback(GtkWidget *widget,gpointer data)
 }
 
 
-// Define the maximum number of rows for the 2D array
 #define MAX_ROWS 100
 
-// Declare a 2D array globally for preselected dates
 static guint preselected_dates[MAX_ROWS][3];
 
-// Counter for the number of rows in preselected_dates
 static int preselected_dates_count = 0;
 
-// Database callback function to retrieve rental data
 static int Vehicles_Rentals_retrieve_callback_calendar(void *data, int argc, char **argv, char **azColName) {
-    // Check if there is space in the preselected_dates array
     if (preselected_dates_count < MAX_ROWS) {
-        // Store data into the preselected_dates array
         for (int i = 0; i < 3; i++) {
             preselected_dates[preselected_dates_count][i] = atoi(argv[i + 1]); // Assuming indices 1, 2, 3 in argv contain integers
         }
