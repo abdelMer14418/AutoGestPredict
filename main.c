@@ -1708,9 +1708,9 @@ static void Vehicle_Selection_callback(GtkWidget *widget,gpointer data)
     databuffer = gtk_entry_get_buffer(vehicle_Id_entry);
     vehicle_id = gtk_entry_buffer_get_text(databuffer);
     Rental_Enddate_entry = gtk_entry_new();
-    gtk_entry_set_placeholder_text(GTK_ENTRY(Rental_Enddate_entry),"Start Date in dd.mm.yyyy");
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Rental_Enddate_entry),"Start Date in dd/mm/yyyy");
     Rental_Startdate_entry = gtk_entry_new();
-    gtk_entry_set_placeholder_text(GTK_ENTRY(Rental_Startdate_entry),"End Date in dd.mm.yyyy");
+    gtk_entry_set_placeholder_text(GTK_ENTRY(Rental_Startdate_entry),"End Date in dd/mm/yyyy");
     GtkWidget *Vehiclesview = CreatevehicleRentals_view_and_model(vehicle_id);
     gtk_box_append(VehicleCalendarBox,Vehiclesview);
     gtk_box_append(VehicleCalendarBox,Rental_Startdate_entry);
@@ -1719,10 +1719,83 @@ static void Vehicle_Selection_callback(GtkWidget *widget,gpointer data)
     g_signal_connect(Rental_Button_proceed, "clicked", G_CALLBACK(Rental_Create_callback), vehicle_id);
     gtk_window_present(GTK_WINDOW(vehicleCalendar_window));
 }
+static guint preselected_dates[][3] = {
+        {15, 1, 2024},
+        {10, 2, 2024},
+        {25, 3, 2024},
+};
+
+static gboolean is_preselected_date(guint day, guint month, guint year) {
+    for (int i = 0; i < G_N_ELEMENTS(preselected_dates); i++) {
+        if (day + 1 == preselected_dates[i][0] && month + 1 == preselected_dates[i][1] && year == preselected_dates[i][2]) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+static gboolean is_day_marked(GtkCalendar *calendar, guint day) {
+    return gtk_calendar_get_day_is_marked(calendar, day);
+}
+
+static void on_date_selected(GtkCalendar *calendar, gpointer user_data) {
+    GDateTime *date;
+    guint day, month, year;
+
+    date = gtk_calendar_get_date(calendar);
+    day = g_date_time_get_day_of_month(date);
+    month = g_date_time_get_month(date) + 1;
+    year = g_date_time_get_year(date);
+
+    if (is_day_marked(calendar, day)) {
+        g_date_time_unref(date);
+        return;
+    }
+
+    if (is_preselected_date(day, month, year)) {
+        gtk_calendar_mark_day(calendar, day);
+        g_date_time_unref(date);
+        return;
+    }
+
+    gtk_calendar_mark_day(calendar, day);
+
+    g_print("Date  : %02d/%02d/%04d\n", day, month, year);
+    g_date_time_unref(date);
+}
+static void Vehicle_Selection_callback_calendar(GtkApplication *app, gpointer user_data) {
+    GtkWidget *CalendarWindow;
+    GtkWidget *calendar;
+    GtkBox *CalendarBox;
+
+    CalendarWindow = gtk_window_new();
+    gtk_window_set_title(GTK_WINDOW(CalendarWindow), "Calendar");
+    CalendarBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_window_set_default_size(GTK_WINDOW(CalendarWindow), 200, 200);
+    gtk_window_set_child(GTK_WINDOW(CalendarWindow), CalendarBox);
+
+    calendar = gtk_calendar_new();
+
+    g_signal_connect(calendar, "day-selected", G_CALLBACK(on_date_selected), NULL);
+
+    for (int i = 0; i < G_N_ELEMENTS(preselected_dates); i++) {
+        gtk_calendar_mark_day(GTK_CALENDAR(calendar), preselected_dates[i][0] - 1);
+    }
+
+    gtk_window_set_child(GTK_WINDOW(CalendarWindow), calendar);
+
+    gtk_widget_show(CalendarWindow);
+}
+
+
 static void VehicleSelection_database_callback(GtkWidget *widget,gpointer data)
 {
     GtkWidget *vehicleSelection_window;
     GtkWidget *Vehicles_Button_Selection_Id;
+    GtkWidget *Vehicles_Button_Selection_Id_Calendar;
+
+
+
     GtkBox *VehiclesSelectionBox;
     vehicleSelection_window = gtk_window_new();
     gtk_window_set_title(GTK_WINDOW(vehicleSelection_window), "Select Vehicle"); // Set the title of the window
@@ -1730,10 +1803,19 @@ static void VehicleSelection_database_callback(GtkWidget *widget,gpointer data)
     gtk_window_set_child(GTK_WINDOW(vehicleSelection_window),VehiclesSelectionBox);
     vehicle_Id_entry = gtk_entry_new();
     Vehicles_Button_Selection_Id = gtk_button_new_with_label("Ok");
+    Vehicles_Button_Selection_Id_Calendar = gtk_button_new_with_label("Calendar");
+
     gtk_entry_set_placeholder_text(GTK_ENTRY(vehicle_Id_entry),"Vehicle Id");
     gtk_box_append(VehiclesSelectionBox,vehicle_Id_entry);
     gtk_box_append(VehiclesSelectionBox,Vehicles_Button_Selection_Id);
+    gtk_box_append(VehiclesSelectionBox,Vehicles_Button_Selection_Id_Calendar);
+
+
+
     g_signal_connect(Vehicles_Button_Selection_Id, "clicked", G_CALLBACK(Vehicle_Selection_callback), NULL);
+    g_signal_connect(Vehicles_Button_Selection_Id_Calendar, "clicked", G_CALLBACK(Vehicle_Selection_callback_calendar), NULL);
+
+
     gtk_window_present(GTK_WINDOW(vehicleSelection_window));
 }
 
