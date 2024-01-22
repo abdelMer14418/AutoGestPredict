@@ -477,8 +477,8 @@ static int admin_RentalHistory_retrieve_callback (void *data, int argc, char **a
     gtk_list_store_append (RentalHistory, &iter);
     gtk_list_store_set (RentalHistory, &iter,
                         COL_RentalHistory_RentalId, atoi(argv[0]),
-                        COL_RentalHistory_UserId, atoi(argv[2]),
-                        COL_RentalHistory_StartDate, argv[1],
+                        COL_RentalHistory_UserId, atoi(argv[1]),//2
+                        COL_RentalHistory_StartDate, argv[2],//1
                         COL_RentalHistory_EndData,argv[3],
                         COL_RentalHistory_Cost,atoi(argv[4]),
                         COL_RentalHistory_Status,argv[5],
@@ -1695,6 +1695,40 @@ static void Rental_Create_callback(GtkWidget *widget,gpointer data)
     printf("%s",sql_db);
 }
 
+
+// Define the maximum number of rows for the 2D array
+#define MAX_ROWS 100
+
+// Declare a 2D array globally for preselected dates
+static guint preselected_dates[MAX_ROWS][3];
+
+// Counter for the number of rows in preselected_dates
+static int preselected_dates_count = 0;
+
+// Database callback function to retrieve rental data
+static int Vehicles_Rentals_retrieve_callback_calendar(void *data, int argc, char **argv, char **azColName) {
+    // Check if there is space in the preselected_dates array
+    if (preselected_dates_count < MAX_ROWS) {
+        // Store data into the preselected_dates array
+        for (int i = 0; i < 3; i++) {
+            preselected_dates[preselected_dates_count][i] = atoi(argv[i + 1]); // Assuming indices 1, 2, 3 in argv contain integers
+        }
+        preselected_dates_count++;
+    }
+    return 0;
+}
+
+
+static void
+fetchRentalData (char* data)
+{
+
+    sprintf(sql_db,"SELECT * FROM Rentals where Vehicle_Id=%s",data);
+    printf("%s",sql_db);
+    sqlite3_exec(db, sql_db, Vehicles_Rentals_retrieve_callback_calendar, 0, &err_msg);
+
+}
+
 static void Vehicle_Selection_callback(GtkWidget *widget,gpointer data)
 {
     GtkEntryBuffer *databuffer;
@@ -1707,6 +1741,7 @@ static void Vehicle_Selection_callback(GtkWidget *widget,gpointer data)
     gtk_window_set_child(GTK_WINDOW(vehicleCalendar_window),VehicleCalendarBox);
     databuffer = gtk_entry_get_buffer(vehicle_Id_entry);
     vehicle_id = gtk_entry_buffer_get_text(databuffer);
+
     Rental_Enddate_entry = gtk_entry_new();
     gtk_entry_set_placeholder_text(GTK_ENTRY(Rental_Enddate_entry),"Start Date in dd/mm/yyyy");
     Rental_Startdate_entry = gtk_entry_new();
@@ -1719,11 +1754,7 @@ static void Vehicle_Selection_callback(GtkWidget *widget,gpointer data)
     g_signal_connect(Rental_Button_proceed, "clicked", G_CALLBACK(Rental_Create_callback), vehicle_id);
     gtk_window_present(GTK_WINDOW(vehicleCalendar_window));
 }
-static guint preselected_dates[][3] = {
-        {15, 1, 2024},
-        {10, 2, 2024},
-        {25, 3, 2024},
-};
+
 
 static gboolean is_preselected_date(guint day, guint month, guint year) {
     for (int i = 0; i < G_N_ELEMENTS(preselected_dates); i++) {
@@ -1767,6 +1798,8 @@ static void Vehicle_Selection_callback_calendar(GtkApplication *app, gpointer us
     GtkWidget *CalendarWindow;
     GtkWidget *calendar;
     GtkBox *CalendarBox;
+    GtkEntryBuffer *databuffer;
+    char* vehicle_id;
 
     CalendarWindow = gtk_window_new();
     gtk_window_set_title(GTK_WINDOW(CalendarWindow), "Calendar");
@@ -1775,6 +1808,11 @@ static void Vehicle_Selection_callback_calendar(GtkApplication *app, gpointer us
     gtk_window_set_child(GTK_WINDOW(CalendarWindow), CalendarBox);
 
     calendar = gtk_calendar_new();
+
+    databuffer = gtk_entry_get_buffer(vehicle_Id_entry);
+    vehicle_id = gtk_entry_buffer_get_text(databuffer);
+
+    fetchRentalData (vehicle_id);
 
     g_signal_connect(calendar, "day-selected", G_CALLBACK(on_date_selected), NULL);
 
